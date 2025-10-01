@@ -20,7 +20,9 @@
     "dev:india": "NODE_ENV=development npm run dev",
     "build:india": "NODE_ENV=production npm run build",
     "setup:india": "node scripts/setup-india.js",
-    "test:india": "npm test -- --testNamePattern=\"India\""
+    "test:india": "npm test -- --testNamePattern=\"India\"",
+    "netlify:build": "npm run db:generate && npm run build",
+    "netlify:dev": "netlify dev"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.17",
