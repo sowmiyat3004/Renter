@@ -1,0 +1,60 @@
+{
+  "localization": {
+    "country": "India",
+    "currency": "INR",
+    "currencySymbol": "₹",
+    "timezone": "Asia/Kolkata",
+    "dateFormat": "DD/MM/YYYY",
+    "numberFormat": "en-IN",
+    "phoneFormat": "+91-XXXXXXXXXX",
+    "addressFormat": "Street, City, State, PIN"
+  },
+  "features": {
+    "enableGoogleOAuth": true,
+    "enableLocationSearch": true,
+    "enableIndianPhoneValidation": true,
+    "enableIndianAddressFormat": true,
+    "enableIndianCurrency": true
+  },
+  "defaultLocation": {
+    "country": "India",
+    "state": "Maharashtra",
+    "city": "Mumbai",
+    "lat": 19.076,
+    "lng": 72.8777
+  },
+  "supportedStates": [
+    "Andhra Pradesh",
+    "Arunachal Pradesh",
+    "Assam",
+    "Bihar",
+    "Chhattisgarh",
+    "Goa",
+    "Gujarat",
+    "Haryana",
+    "Himachal Pradesh",
+    "Jharkhand",
+    "Karnataka",
+    "Kerala",
+    "Madhya Pradesh",
+    "Maharashtra",
+    "Manipur",
+    "Meghalaya",
+    "Mizoram",
+    "Nagaland",
+    "Odisha",
+    "Punjab",
+    "Rajasthan",
+    "Sikkim",
+    "Tamil Nadu",
+    "Telangana",
+    "Tripura",
+    "Uttar Pradesh",
+    "Uttarakhand",
+    "West Bengal",
+    "Delhi",
+    "Jammu and Kashmir",
+    "Ladakh",
+    "Puducherry"
+  ]
+}
