@@ -9,22 +9,6 @@
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
-[functions]
-  node_bundler = "esbuild"
-  directory = ".netlify/functions"
-
-# Next.js API routes
-[[redirects]]
-  from = "/api/*"
-  to = "/.netlify/functions/:splat"
-  status = 200
-
-# Next.js pages
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
-
 # Headers for security
 [[headers]]
   for = "/*"
@@ -33,12 +17,6 @@
     X-XSS-Protection = "1; mode=block"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
-
-# API routes
-[[redirects]]
-  from = "/api/*"
-  to = "/.netlify/functions/:splat"
-  status = 200
 
 # Static assets
 [[headers]]
