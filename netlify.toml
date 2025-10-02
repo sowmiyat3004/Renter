@@ -1,5 +1,5 @@
 [build]
-  command = "npm run build"
+  command = "npm run netlify:build"
   publish = ".next"
 
 [build.environment]
@@ -11,8 +11,15 @@
 
 [functions]
   node_bundler = "esbuild"
+  directory = ".netlify/functions"
 
-# Redirects for Next.js routing
+# Next.js API routes
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+
+# Next.js pages
 [[redirects]]
   from = "/*"
   to = "/index.html"

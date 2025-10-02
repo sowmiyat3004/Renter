@@ -1,192 +1,170 @@
-# 🚀 Netlify Deployment Guide for Renter Platform
+# 🚀 Netlify Deployment Guide for Renter App
 
-This guide will help you deploy your Renter platform to Netlify with all the necessary configurations.
+## Prerequisites
+- GitHub repository with your code
+- Free Supabase account for database
+- Netlify account
 
-## 📋 Prerequisites
+## Step 1: Set up Free Database (Supabase)
 
-1. **Netlify Account**: Sign up at [netlify.com](https://netlify.com)
-2. **GitHub Repository**: Your code should be in GitHub (✅ Already done)
-3. **Database**: You'll need a PostgreSQL database (Netlify doesn't support SQLite)
+### 1.1 Create Supabase Project
+1. Go to [supabase.com](https://supabase.com)
+2. Sign up for free account
+3. Click "New Project"
+4. Choose organization and enter project details:
+   - **Name**: `renter-app`
+   - **Database Password**: Choose a strong password
+   - **Region**: Choose closest to your users
+5. Click "Create new project"
+6. Wait for project to be ready (2-3 minutes)
 
-## 🔧 Step 1: Database Setup
+### 1.2 Get Database Connection String
+1. In your Supabase dashboard, go to **Settings** → **Database**
+2. Scroll down to **Connection string**
+3. Copy the **URI** connection string (looks like):
+   ```
+   postgresql://postgres:[YOUR-PASSWORD]@db.[PROJECT-REF].supabase.co:5432/postgres
+   ```
 
-Since Netlify doesn't support SQLite, you'll need a PostgreSQL database:
-
-### Option A: Use Netlify's Database Add-ons
-- **FaunaDB**: Add FaunaDB add-on in Netlify
-- **PlanetScale**: MySQL-compatible database
-- **Supabase**: PostgreSQL with additional features
-
-### Option B: External Database Services
-- **Railway**: PostgreSQL hosting
-- **Neon**: Serverless PostgreSQL
-- **Supabase**: Full-stack platform with PostgreSQL
-
-## 🚀 Step 2: Deploy to Netlify
-
-### Method 1: Connect GitHub Repository
-
-1. **Login to Netlify**
-2. **Click "New site from Git"**
-3. **Choose GitHub** and authorize Netlify
-4. **Select your repository**: `sowmiyat3004/Renter`
-5. **Configure build settings**:
-   - **Build command**: `npm run netlify:build`
-   - **Publish directory**: `.next`
-   - **Node version**: `18`
-
-### Method 2: Netlify CLI (Recommended)
-
+### 1.3 Set up Database Schema
 ```bash
-# Install Netlify CLI
-npm install -g netlify-cli
-
-# Login to Netlify
-netlify login
-
-# Initialize Netlify in your project
-netlify init
-
-# Deploy
-netlify deploy --prod
+# In your local project directory
+npx prisma migrate dev --name init
+npx prisma db push
+npx prisma db seed
 ```
 
-## 🔐 Step 3: Environment Variables
+## Step 2: Deploy to Netlify
 
-Add these environment variables in Netlify Site Settings → Environment Variables:
+### 2.1 Connect Repository
+1. Go to [netlify.com](https://netlify.com)
+2. Sign up/login with GitHub
+3. Click "New site from Git"
+4. Choose "GitHub" and authorize
+5. Select your `Renter` repository
+6. Click "Deploy site"
 
-### Required Variables
-```
-DATABASE_URL=postgresql://username:password@host:port/database
-NEXTAUTH_URL=https://your-site-name.netlify.app
-NEXTAUTH_SECRET=your-nextauth-secret-key
+### 2.2 Configure Build Settings
+Netlify should auto-detect your settings, but verify:
+- **Build command**: `npm run netlify:build`
+- **Publish directory**: `.next`
+- **Node version**: 18
+
+### 2.3 Add Environment Variables
+In Netlify dashboard → Site settings → Environment variables:
+
+```env
+DATABASE_URL=postgresql://postgres:[PASSWORD]@db.[PROJECT-REF].supabase.co:5432/postgres
+NEXTAUTH_URL=https://your-app-name.netlify.app
+NEXTAUTH_SECRET=your-super-secret-key-here
+JWT_SECRET=your-jwt-secret-key-here
 GOOGLE_CLIENT_ID=your-google-client-id
 GOOGLE_CLIENT_SECRET=your-google-client-secret
-JWT_SECRET=your-jwt-secret-key
-```
-
-### Optional Variables
-```
 SMTP_HOST=smtp.gmail.com
 SMTP_PORT=587
 SMTP_USER=your-email@gmail.com
 SMTP_PASS=your-app-password
-SMTP_FROM=noreply@renter.com
-MAX_FILE_SIZE=1048576
-MAX_IMAGES_PER_LISTING=10
-APP_NAME=Renter
-APP_URL=https://your-site-name.netlify.app
-DEFAULT_COUNTRY=India
-DEFAULT_CURRENCY=INR
-DEFAULT_TIMEZONE=Asia/Kolkata
-CURRENCY_SYMBOL=₹
 ```
 
-## 🗄️ Step 4: Database Migration
+### 2.4 Deploy
+1. Click "Deploy site"
+2. Wait for build to complete (5-10 minutes)
+3. Your app will be available at `https://your-app-name.netlify.app`
 
-After deployment, you'll need to run database migrations:
+## Step 3: Post-Deployment Setup
+
+### 3.1 Run Database Migration
+After deployment, you need to run the database migration:
 
 ```bash
-# Using Netlify CLI
-netlify functions:invoke db-migrate
-
-# Or add a build hook to run migrations
+# You can do this locally with production DATABASE_URL
+DATABASE_URL="your-supabase-url" npx prisma migrate deploy
+DATABASE_URL="your-supabase-url" npx prisma db seed
 ```
 
-## 🔧 Step 5: Netlify Functions (Optional)
+### 3.2 Test Your App
+1. Visit your Netlify URL
+2. Test user registration
+3. Test listing creation
+4. Test image uploads
+5. Test admin functionality
 
-For server-side features, you might need Netlify Functions:
+## Step 4: Configure Google OAuth (Optional)
 
-```javascript
-// netlify/functions/api.js
-exports.handler = async (event, context) => {
-  // Your API logic here
-  return {
-    statusCode: 200,
-    body: JSON.stringify({ message: 'Hello from Netlify Functions!' })
-  }
-}
-```
+### 4.1 Google Cloud Console
+1. Go to [Google Cloud Console](https://console.cloud.google.com)
+2. Create new project or select existing
+3. Enable Google+ API
+4. Go to "Credentials" → "Create Credentials" → "OAuth 2.0 Client ID"
+5. Add authorized redirect URI: `https://your-app-name.netlify.app/api/auth/callback/google`
+6. Copy Client ID and Client Secret
 
-## 📁 Step 6: File Structure for Netlify
+### 4.2 Update Netlify Environment Variables
+Add the Google OAuth credentials to your Netlify environment variables.
 
-Your project structure should be:
-```
-renter/
-├── netlify.toml          # Netlify configuration
-├── package.json          # Dependencies and scripts
-├── next.config.js        # Next.js configuration
-├── prisma/              # Database schema
-├── app/                 # Next.js app directory
-├── components/          # React components
-├── lib/                 # Utility functions
-└── public/              # Static assets
-```
+## Step 5: Configure Email (Optional)
 
-## 🚨 Important Considerations
+### 5.1 Gmail SMTP Setup
+1. Enable 2-factor authentication on your Gmail
+2. Generate an "App Password" for your application
+3. Use your Gmail credentials in SMTP environment variables
 
-### Limitations of Netlify for Next.js Apps
+## Troubleshooting
 
-1. **Server-Side Features**: Some Next.js features may not work on Netlify
-2. **Database**: SQLite won't work, need PostgreSQL
-3. **File Uploads**: Limited file storage options
-4. **Server Functions**: May need Netlify Functions for some API routes
+### Common Issues:
 
-### Recommended Alternatives
+#### Build Failures
+- Check Node.js version (should be 18)
+- Ensure all dependencies are in `package.json`
+- Check build logs in Netlify dashboard
 
-For a full-featured Next.js app like Renter, consider:
+#### Database Connection Issues
+- Verify `DATABASE_URL` is correct
+- Check if Supabase project is active
+- Ensure database schema is migrated
 
-1. **Vercel** (Recommended for Next.js)
-2. **Railway** (Full-stack deployment)
-3. **Render** (Docker-based deployment)
-4. **DigitalOcean App Platform**
+#### API Route Issues
+- Check Netlify function logs
+- Verify API routes are in `app/api/` directory
+- Check redirects in `netlify.toml`
 
-## 🎯 Quick Deploy Commands
+#### Image Upload Issues
+- Netlify has file size limits
+- Consider using external storage (Cloudinary, AWS S3)
+- Check file upload configuration
 
-```bash
-# Install Netlify CLI
-npm install -g netlify-cli
+### Getting Help:
+1. Check Netlify build logs
+2. Check Supabase logs
+3. Test locally with production environment variables
+4. Use `npx prisma studio` to inspect database
 
-# Login and deploy
-netlify login
-netlify init
-netlify deploy --prod
+## Free Tier Limits
 
-# Set environment variables
-netlify env:set DATABASE_URL "your-database-url"
-netlify env:set NEXTAUTH_SECRET "your-secret"
-netlify env:set GOOGLE_CLIENT_ID "your-google-client-id"
-netlify env:set GOOGLE_CLIENT_SECRET "your-google-client-secret"
-```
+### Netlify
+- 100GB bandwidth/month
+- 300 build minutes/month
+- 100GB storage
 
-## 🔍 Troubleshooting
+### Supabase
+- 500MB database storage
+- 2GB bandwidth/month
+- 50,000 monthly active users
 
-### Common Issues
+## Next Steps After Deployment
 
-1. **Build Failures**: Check Node.js version (use 18)
-2. **Database Errors**: Ensure PostgreSQL connection string is correct
-3. **Environment Variables**: Make sure all required variables are set
-4. **API Routes**: Some may need to be converted to Netlify Functions
+1. **Set up custom domain** (optional)
+2. **Configure CDN** for better performance
+3. **Set up monitoring** and analytics
+4. **Configure backups** for your database
+5. **Set up staging environment** for testing
 
-### Build Logs
+## Security Checklist
 
-Check Netlify build logs for specific errors:
-- Go to Site Settings → Build & Deploy → Build logs
-
-## 📞 Support
-
-If you encounter issues:
-1. Check Netlify documentation
-2. Review build logs
-3. Consider using Vercel for better Next.js support
-
-## 🎉 Success!
-
-Once deployed, your Renter platform will be available at:
-`https://your-site-name.netlify.app`
-
-Remember to:
-- Set up your database
-- Configure environment variables
-- Test all features
-- Set up custom domain (optional)
+- [ ] Environment variables are secure
+- [ ] Database password is strong
+- [ ] OAuth credentials are properly configured
+- [ ] SMTP credentials are secure
+- [ ] File uploads are validated
+- [ ] API routes are protected
+- [ ] CORS is properly configured
