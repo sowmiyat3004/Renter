@@ -122,7 +122,7 @@ export default function ListingsContent() {
           </div>
         </div>
 
-        {/* Filters Panel */}
+        {/* Filters Panel - Fixed prop name */}
         {showFilters && (
           <div className="mb-6">
             <Filters 
