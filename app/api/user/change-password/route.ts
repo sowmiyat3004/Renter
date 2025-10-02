@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
       where: { id: session.user.id },
       select: {
         id: true,
-        password: true,
+        passwordHash: true,
         email: true
       }
     })
@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
     }
 
     // For OAuth users (Google sign-in), they don't have a password
-    if (!user.password) {
+    if (!user.passwordHash) {
       return NextResponse.json(
         { success: false, error: 'Password change not available for OAuth accounts. Please use your Google account to sign in.' },
         { status: 400 }
@@ -59,7 +59,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Verify current password
-    const isCurrentPasswordValid = await bcrypt.compare(currentPassword, user.password)
+    const isCurrentPasswordValid = await bcrypt.compare(currentPassword, user.passwordHash)
     if (!isCurrentPasswordValid) {
       return NextResponse.json(
         { success: false, error: 'Current password is incorrect' },
