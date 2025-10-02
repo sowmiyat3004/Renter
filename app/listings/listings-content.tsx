@@ -127,7 +127,8 @@ export default function ListingsContent() {
           <div className="mb-6">
             <Filters 
               filters={filters} 
-              onFiltersChange={handleFilterChange}
+              onFilterChange={handleFilterChange}
+              onApplyFilters={() => setShowFilters(false)}
             />
           </div>
         )}
