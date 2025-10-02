@@ -32,11 +32,11 @@ export async function GET(request: NextRequest) {
 
     // Convert to object format
     const settings = {
-      emailNotifications: notificationSettings.find(s => s.key === 'user_email_notifications')?.value === 'true' ?? true,
-      smsNotifications: notificationSettings.find(s => s.key === 'user_sms_notifications')?.value === 'true' ?? false,
-      listingUpdates: notificationSettings.find(s => s.key === 'user_listing_updates')?.value === 'true' ?? true,
-      newMessages: notificationSettings.find(s => s.key === 'user_new_messages')?.value === 'true' ?? true,
-      adminAlerts: notificationSettings.find(s => s.key === 'user_admin_alerts')?.value === 'true' ?? false,
+      emailNotifications: notificationSettings.find(s => s.key === 'user_email_notifications')?.value === 'true' || false,
+      smsNotifications: notificationSettings.find(s => s.key === 'user_sms_notifications')?.value === 'true' || false,
+      listingUpdates: notificationSettings.find(s => s.key === 'user_listing_updates')?.value === 'true' || false,
+      newMessages: notificationSettings.find(s => s.key === 'user_new_messages')?.value === 'true' || false,
+      adminAlerts: notificationSettings.find(s => s.key === 'user_admin_alerts')?.value === 'true' || false,
     }
 
     return NextResponse.json({
