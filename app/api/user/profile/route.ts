@@ -21,10 +21,6 @@ export async function GET(request: NextRequest) {
         id: true,
         name: true,
         email: true,
-        phone: true,
-        address: true,
-        city: true,
-        state: true,
         role: true,
         createdAt: true,
         updatedAt: true,
@@ -66,7 +62,7 @@ export async function PUT(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { name, phone, address, city, state } = body
+    const { name } = body
 
     // Validate input
     if (!name || name.trim().length < 2) {
@@ -76,31 +72,16 @@ export async function PUT(request: NextRequest) {
       )
     }
 
-    if (phone && !/^(\+91|91)?[6-9]\d{9}$/.test(phone.replace(/\s/g, ''))) {
-      return NextResponse.json(
-        { success: false, error: 'Invalid phone number format' },
-        { status: 400 }
-      )
-    }
-
     const updatedUser = await prisma.user.update({
       where: { id: session.user.id },
       data: {
         name: name.trim(),
-        phone: phone?.trim() || null,
-        address: address?.trim() || null,
-        city: city?.trim() || null,
-        state: state?.trim() || null,
         updatedAt: new Date(),
       },
       select: {
         id: true,
         name: true,
         email: true,
-        phone: true,
-        address: true,
-        city: true,
-        state: true,
         role: true,
         createdAt: true,
         updatedAt: true,
