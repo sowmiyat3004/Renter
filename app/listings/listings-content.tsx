@@ -85,7 +85,7 @@ export default function ListingsContent() {
           <h1 className="text-3xl font-bold text-gray-900 mb-4">
             Find Your Perfect Home
           </h1>
-          <SearchBar onSearch={handleFilterChange} />
+          <SearchBar />
         </div>
 
         {/* Filters and View Toggle */}
