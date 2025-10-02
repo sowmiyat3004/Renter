@@ -141,7 +141,6 @@ export async function PATCH(request: NextRequest) {
         name: true,
         email: true,
         role: true,
-        isActive: true,
         updatedAt: true
       }
     })
