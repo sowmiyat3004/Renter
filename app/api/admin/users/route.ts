@@ -48,8 +48,7 @@ export async function GET(request: NextRequest) {
           role: true,
           createdAt: true,
           updatedAt: true,
-          isEmailVerified: true,
-          isPhoneVerified: true,
+          emailVerified: true,
           _count: {
             select: {
               listings: true
