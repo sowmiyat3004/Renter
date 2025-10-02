@@ -1,24 +1,5 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "package.json",
-      "use": "@vercel/next"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "/api/$1"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/$1"
-    }
-  ],
-  "env": {
-    "NODE_ENV": "production"
-  },
   "functions": {
     "app/api/**/*.ts": {
       "maxDuration": 30
@@ -60,10 +41,6 @@
         {
           "key": "Referrer-Policy",
           "value": "strict-origin-when-cross-origin"
-        },
-        {
-          "key": "Strict-Transport-Security",
-          "value": "max-age=31536000; includeSubDomains"
         }
       ]
     }
@@ -71,7 +48,7 @@
   "redirects": [
     {
       "source": "/admin",
-      "destination": "/admin/dashboard",
+      "destination": "/admin/enhanced-dashboard",
       "permanent": false
     }
   ]
