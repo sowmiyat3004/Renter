@@ -99,7 +99,7 @@ export async function PATCH(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { userId, role, isActive } = body
+    const { userId, role } = body
 
     if (!userId) {
       return NextResponse.json(
@@ -122,9 +122,6 @@ export async function PATCH(request: NextRequest) {
       updateData.role = role
     }
     
-    if (typeof isActive === 'boolean') {
-      updateData.isActive = isActive
-    }
 
     if (Object.keys(updateData).length === 0) {
       return NextResponse.json(

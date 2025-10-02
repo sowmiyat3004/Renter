@@ -28,8 +28,7 @@ export async function GET(request: NextRequest) {
         role: true,
         createdAt: true,
         updatedAt: true,
-        isEmailVerified: true,
-        isPhoneVerified: true,
+        emailVerified: true,
       }
     })
 
@@ -105,8 +104,7 @@ export async function PUT(request: NextRequest) {
         role: true,
         createdAt: true,
         updatedAt: true,
-        isEmailVerified: true,
-        isPhoneVerified: true,
+        emailVerified: true,
       }
     })
 
