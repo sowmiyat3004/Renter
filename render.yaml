@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: renter-app
+    env: node
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NEXTAUTH_URL
+        value: https://renter-app.onrender.com
+      - key: NEXTAUTH_SECRET
+        generateValue: true
+      - key: JWT_SECRET
+        generateValue: true
+      - key: MIGRATION_TOKEN
+        generateValue: true
+
+  - type: pserv
+    name: renter-db
+    env: postgresql
+    plan: free
