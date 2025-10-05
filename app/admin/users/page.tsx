@@ -10,8 +10,10 @@ interface UserWithDetails {
   id: string
   name: string
   email: string
+  phone?: string
   role: string
   createdAt: string
+  lastLoginAt?: string
   _count: {
     listings: number
   }
@@ -23,6 +25,14 @@ export default function AdminUsersPage() {
   const [users, setUsers] = useState<UserWithDetails[]>([])
   const [loading, setLoading] = useState(true)
   const [actionLoading, setActionLoading] = useState<string | null>(null)
+  const [searchTerm, setSearchTerm] = useState('')
+  const [roleFilter, setRoleFilter] = useState('')
+  const [pagination, setPagination] = useState({
+    page: 1,
+    limit: 20,
+    total: 0,
+    totalPages: 0
+  })
 
   useEffect(() => {
     if (status === 'loading') return
@@ -35,13 +45,32 @@ export default function AdminUsersPage() {
     fetchUsers()
   }, [session, status, router])
 
+  // Refetch when pagination changes
+  useEffect(() => {
+    if (session?.user) {
+      fetchUsers()
+    }
+  }, [pagination.page, searchTerm, roleFilter])
+
   const fetchUsers = async () => {
     try {
-      const response = await fetch('/api/admin/users')
+      const params = new URLSearchParams({
+        page: pagination.page.toString(),
+        limit: pagination.limit.toString(),
+        ...(searchTerm && { search: searchTerm }),
+        ...(roleFilter && { role: roleFilter })
+      })
+
+      const response = await fetch(`/api/admin/users?${params}`)
       const data = await response.json()
       
       if (data.success) {
         setUsers(data.data)
+        setPagination(prev => ({
+          ...prev,
+          total: data.pagination.total,
+          totalPages: data.pagination.totalPages
+        }))
       }
     } catch (error) {
       console.error('Error fetching users:', error)
@@ -149,10 +178,56 @@ export default function AdminUsersPage() {
           </div>
         </div>
 
+        {/* Search and Filters */}
+        <div className="bg-white rounded-lg shadow p-6 mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Search Users
+              </label>
+              <input
+                type="text"
+                placeholder="Search by name or email..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Filter by Role
+              </label>
+              <select
+                value={roleFilter}
+                onChange={(e) => setRoleFilter(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              >
+                <option value="">All Roles</option>
+                <option value="USER">User</option>
+                <option value="ADMIN">Admin</option>
+                <option value="SUPER_ADMIN">Super Admin</option>
+              </select>
+            </div>
+            <div className="flex items-end">
+              <button
+                onClick={fetchUsers}
+                className="w-full px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              >
+                Search
+              </button>
+            </div>
+          </div>
+        </div>
+
         {/* Users */}
         <div className="bg-white rounded-lg shadow">
-          <div className="px-6 py-4 border-b border-gray-200">
-            <h3 className="text-lg font-medium text-gray-900">All Users</h3>
+          <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+            <h3 className="text-lg font-medium text-gray-900">
+              All Users ({pagination.total})
+            </h3>
+            <div className="text-sm text-gray-500">
+              Page {pagination.page} of {pagination.totalPages}
+            </div>
           </div>
           
           <div className="divide-y divide-gray-200">
@@ -178,10 +253,16 @@ export default function AdminUsersPage() {
                       </div>
                       
                       <p className="text-gray-600 mt-1">{user.email}</p>
+                      {user.phone && (
+                        <p className="text-gray-500 text-sm">{user.phone}</p>
+                      )}
                       
                       <div className="flex items-center space-x-4 mt-2 text-sm text-gray-500">
                         <span>{user._count.listings} listings</span>
                         <span>Joined: {new Date(user.createdAt).toLocaleDateString()}</span>
+                        {user.lastLoginAt && (
+                          <span>Last login: {new Date(user.lastLoginAt).toLocaleDateString()}</span>
+                        )}
                       </div>
                     </div>
                     
@@ -208,6 +289,34 @@ export default function AdminUsersPage() {
               ))
             )}
           </div>
+          
+          {/* Pagination */}
+          {pagination.totalPages > 1 && (
+            <div className="px-6 py-4 border-t border-gray-200 flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <button
+                  onClick={() => setPagination(prev => ({ ...prev, page: Math.max(1, prev.page - 1) }))}
+                  disabled={pagination.page === 1}
+                  className="px-3 py-1 border border-gray-300 rounded-md text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+                >
+                  Previous
+                </button>
+                <span className="text-sm text-gray-500">
+                  Page {pagination.page} of {pagination.totalPages}
+                </span>
+                <button
+                  onClick={() => setPagination(prev => ({ ...prev, page: Math.min(prev.totalPages, prev.page + 1) }))}
+                  disabled={pagination.page === pagination.totalPages}
+                  className="px-3 py-1 border border-gray-300 rounded-md text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+                >
+                  Next
+                </button>
+              </div>
+              <div className="text-sm text-gray-500">
+                Showing {((pagination.page - 1) * pagination.limit) + 1} to {Math.min(pagination.page * pagination.limit, pagination.total)} of {pagination.total} users
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

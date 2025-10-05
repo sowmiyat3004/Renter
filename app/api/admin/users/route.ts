@@ -84,3 +84,73 @@ export async function GET(request: NextRequest) {
     )
   }
 }
+
+export async function PATCH(request: NextRequest) {
+  try {
+    const session = await getServerSession(authOptions)
+    
+    if (!session || (session.user.role !== 'ADMIN' && session.user.role !== 'SUPER_ADMIN')) {
+      return NextResponse.json(
+        { success: false, error: 'Unauthorized' },
+        { status: 401 }
+      )
+    }
+
+    const body = await request.json()
+    const { userId, role } = body
+
+    if (!userId || !role) {
+      return NextResponse.json(
+        { success: false, error: 'User ID and role are required' },
+        { status: 400 }
+      )
+    }
+
+    // Prevent users from changing their own role
+    if (userId === session.user.id) {
+      return NextResponse.json(
+        { success: false, error: 'Cannot change your own role' },
+        { status: 400 }
+      )
+    }
+
+    // Only SUPER_ADMIN can assign SUPER_ADMIN role
+    if (role === 'SUPER_ADMIN' && session.user.role !== 'SUPER_ADMIN') {
+      return NextResponse.json(
+        { success: false, error: 'Only Super Admin can assign Super Admin role' },
+        { status: 403 }
+      )
+    }
+
+    const updatedUser = await prisma.user.update({
+      where: { id: userId },
+      data: { role },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        phone: true,
+        role: true,
+        createdAt: true,
+        lastLoginAt: true,
+        _count: {
+          select: {
+            listings: true
+          }
+        }
+      }
+    })
+
+    return NextResponse.json({
+      success: true,
+      data: updatedUser,
+      message: 'User role updated successfully'
+    })
+  } catch (error) {
+    console.error('Error updating user role:', error)
+    return NextResponse.json(
+      { success: false, error: 'Failed to update user role' },
+      { status: 500 }
+    )
+  }
+}
