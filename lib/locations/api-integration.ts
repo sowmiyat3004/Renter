@@ -52,14 +52,19 @@ export class LocationAPIService {
     }
 
     try {
-      // Use Google Places API
-      const response = await fetch(`/api/places/search?query=${encodeURIComponent(query)}&country=${country}`)
-      const data = await response.json()
+      // Check if Google Places API is enabled
+      const enableGooglePlaces = process.env.ENABLE_GOOGLE_PLACES === 'true'
       
-      if (data.success) {
-        const locations = this.formatPlaceResults(data.results)
-        this.cache.set(cacheKey, locations)
-        return locations
+      if (enableGooglePlaces) {
+        // Use Google Places API
+        const response = await fetch(`/api/places/search?query=${encodeURIComponent(query)}&country=${country}`)
+        const data = await response.json()
+        
+        if (data.success && data.results.length > 0) {
+          const locations = this.formatPlaceResults(data.results)
+          this.cache.set(cacheKey, locations)
+          return locations
+        }
       }
     } catch (error) {
       console.error('Error fetching places:', error)

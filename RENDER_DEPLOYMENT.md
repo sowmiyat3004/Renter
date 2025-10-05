@@ -57,17 +57,34 @@ MIGRATION_TOKEN=your-migration-token
 2. Copy the "External Database URL"
 3. Paste it as `DATABASE_URL` in your web service
 
-## Step 4: Database Migration
+## Step 4: Environment Variables Setup
 
-### 4.1 Automatic Migration
-Render will automatically run:
-```bash
-npx prisma migrate deploy
-npx prisma db seed
+### 4.1 Required Environment Variables
+In your Render dashboard, go to **Environment** tab and add:
+
+```
+# Database
+DATABASE_URL=your_postgresql_connection_string
+
+# Authentication
+NEXTAUTH_URL=https://your-app-name.onrender.com
+NEXTAUTH_SECRET=your-secret-key
+JWT_SECRET=your-jwt-secret
+
+# Google Places API (Optional - for enhanced location search)
+GOOGLE_PLACES_API_KEY=AIzaSyClfhP4Wa471ho7NpNypWm757xSW2uXmlI
+ENABLE_GOOGLE_PLACES=true
+
+# Migration
+MIGRATION_TOKEN=your-migration-token
 ```
 
-### 4.2 Test Database Connection
-Visit: `https://renter-app.onrender.com/api/test-db`
+### 4.2 Database Migration
+After setting environment variables, visit:
+`https://your-app-name.onrender.com/api/migrate`
+
+### 4.3 Test Database Connection
+Visit: `https://your-app-name.onrender.com/api/test-db`
 
 ## Step 5: Test Your App
 
