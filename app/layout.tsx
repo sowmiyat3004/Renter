@@ -3,7 +3,7 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import { Providers } from '@/components/providers'
 import { Toaster } from 'react-hot-toast'
-import { EnhancedHeader } from '@/components/enhanced-header'
+import { FixedHeader } from '@/components/fixed-header'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -36,7 +36,7 @@ export default function RootLayout({
     <html lang="en" className="h-full">
       <body className={`${inter.className} h-full`}>
         <Providers>
-          <EnhancedHeader />
+          <FixedHeader />
           <main className="min-h-screen">
             {children}
           </main>

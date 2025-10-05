@@ -31,12 +31,15 @@ export default function NotificationBell() {
       const data = await response.json()
       
       if (data.success) {
-        setNotifications(data.data)
-        const unread = data.data.filter((n: Notification) => !n.isRead).length
+        setNotifications(data.data || [])
+        const unread = (data.data || []).filter((n: Notification) => !n.isRead).length
         setUnreadCount(unread)
       }
     } catch (error) {
       console.error('Error fetching notifications:', error)
+      // Set empty state on error
+      setNotifications([])
+      setUnreadCount(0)
     } finally {
       setLoading(false)
     }
