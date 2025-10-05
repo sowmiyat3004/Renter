@@ -72,7 +72,7 @@ NEXTAUTH_SECRET=your-secret-key
 JWT_SECRET=your-jwt-secret
 
 # Google Places API (Optional - for enhanced location search)
-GOOGLE_PLACES_API_KEY=AIzaSyClfhP4Wa471ho7NpNypWm757xSW2uXmlI
+GOOGLE_PLACES_API_KEY=your-google-places-api-key-here
 ENABLE_GOOGLE_PLACES=true
 
 # Migration
