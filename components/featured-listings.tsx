@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { MapPin, Bed, Bath, DollarSign, Star, Heart } from 'lucide-react'
+import { MapPin, Bed, Bath, Star, Heart } from 'lucide-react'
 import { formatPrice } from '@/lib/utils'
 import { ListingWithDetails } from '@/types'
 
@@ -90,7 +90,7 @@ export function FeaturedListings() {
         {listings.length === 0 ? (
           <div className="text-center py-12">
             <div className="text-gray-400 mb-4">
-              <DollarSign className="h-12 w-12 mx-auto" />
+              <span className="text-4xl text-gray-400">₹</span>
             </div>
             <h3 className="text-lg font-medium text-gray-900 mb-2">
               No listings available
@@ -113,7 +113,7 @@ export function FeaturedListings() {
                     />
                   ) : (
                     <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                      <DollarSign className="h-12 w-12 text-gray-400" />
+                      <span className="text-4xl text-gray-400">₹</span>
                     </div>
                   )}
                   

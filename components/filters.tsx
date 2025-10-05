@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { X, DollarSign, Bed, Bath, Wifi, Car, Home } from 'lucide-react'
+import { X, Bed, Bath, Wifi, Car, Home } from 'lucide-react'
 
 interface FiltersProps {
   filters: {
@@ -104,7 +104,7 @@ export function Filters({ filters, onFilterChange, onApplyFilters }: FiltersProp
             <div>
               <label className="block text-xs text-gray-500 mb-1">Min Price</label>
               <div className="relative">
-                <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">₹</span>
                 <input
                   type="number"
                   placeholder="0"
@@ -117,7 +117,7 @@ export function Filters({ filters, onFilterChange, onApplyFilters }: FiltersProp
             <div>
               <label className="block text-xs text-gray-500 mb-1">Max Price</label>
               <div className="relative">
-                <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">₹</span>
                 <input
                   type="number"
                   placeholder="5000"

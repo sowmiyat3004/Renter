@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useParams } from 'next/navigation'
 import Link from 'next/link'
-import { MapPin, Bed, Bath, DollarSign, Star, Heart, Share2, Phone, Mail, Calendar } from 'lucide-react'
+import { MapPin, Bed, Bath, Star, Heart, Share2, Phone, Mail, Calendar } from 'lucide-react'
 import { formatPrice } from '@/lib/utils'
 import { ListingWithDetails } from '@/types'
 
@@ -178,7 +178,7 @@ export default function ListingPage() {
                 </div>
               ) : (
                 <div className="aspect-w-16 aspect-h-9 bg-gray-200 rounded-lg flex items-center justify-center">
-                  <DollarSign className="h-24 w-24 text-gray-400" />
+                  <span className="text-6xl text-gray-400">₹</span>
                 </div>
               )}
             </div>

@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { MapPin, Bed, Bath, DollarSign, Heart, Star } from 'lucide-react'
+import { MapPin, Bed, Bath, Heart, Star } from 'lucide-react'
 import { formatPrice } from '@/lib/utils'
 import { ListingWithDetails } from '@/types'
 
@@ -40,7 +40,7 @@ export function ListingCard({ listing, viewMode }: ListingCardProps) {
               />
             ) : (
               <div className="w-full h-full bg-gray-200 rounded-l-lg flex items-center justify-center">
-                <DollarSign className="h-12 w-12 text-gray-400" />
+                <span className="text-4xl text-gray-400">₹</span>
               </div>
             )}
             
@@ -152,7 +152,7 @@ export function ListingCard({ listing, viewMode }: ListingCardProps) {
           />
         ) : (
           <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-            <DollarSign className="h-12 w-12 text-gray-400" />
+            <span className="text-4xl text-gray-400">₹</span>
           </div>
         )}
         
