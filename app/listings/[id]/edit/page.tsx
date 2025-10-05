@@ -148,6 +148,7 @@ export default function EditListingPage() {
       }
 
       console.log('Updating listing data:', listingData)
+      console.log('Listing ID:', listingId)
 
       const response = await fetch(`/api/listings/${listingId}`, {
         method: 'PUT',
@@ -157,6 +158,7 @@ export default function EditListingPage() {
         body: JSON.stringify(listingData),
       })
 
+      console.log('Response status:', response.status)
       const result = await response.json()
       console.log('API response:', result)
 

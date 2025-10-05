@@ -69,7 +69,11 @@ export async function PUT(
     }
 
     const body = await request.json()
+    console.log('Received update data:', body)
+    console.log('Listing ID:', params.id)
+    
     const validatedData = updateListingSchema.parse({ ...body, id: params.id })
+    console.log('Validated data:', validatedData)
 
     // Check if listing exists and user owns it
     const existingListing = await prisma.listing.findUnique({
@@ -127,11 +131,13 @@ export async function PUT(
     })
 
     // Update amenities if provided
-    if (validatedData.amenities) {
+    if (validatedData.amenities !== undefined) {
+      // Delete existing amenities
       await prisma.listingAmenity.deleteMany({
         where: { listingId: params.id }
       })
 
+      // Add new amenities if any
       if (validatedData.amenities.length > 0) {
         await prisma.listingAmenity.createMany({
           data: validatedData.amenities.map(amenityId => ({
@@ -152,14 +158,15 @@ export async function PUT(
     console.error('Update listing error:', error)
     
     if (error instanceof Error && error.name === 'ZodError') {
+      console.error('Validation error details:', error.message)
       return NextResponse.json(
-        { success: false, error: 'Invalid input data' },
+        { success: false, error: 'Invalid input data', details: error.message },
         { status: 400 }
       )
     }
 
     return NextResponse.json(
-      { success: false, error: 'Failed to update listing' },
+      { success: false, error: 'Failed to update listing', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     )
   }
