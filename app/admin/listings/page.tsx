@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft, Home, Users, Settings, ChartBarIcon } from '@heroicons/react/24/outline'
+import { ArrowLeftIcon, HomeIcon, UsersIcon, CogIcon, ChartBarIcon } from '@heroicons/react/24/outline'
 import { ListingWithDetails } from '@/types'
 
 export default function AdminListingsPage() {
@@ -95,7 +95,7 @@ export default function AdminListingsPage() {
                 href="/admin"
                 className="p-2 text-gray-400 hover:text-gray-600"
               >
-                <ArrowLeft className="h-6 w-6" />
+                <ArrowLeftIcon className="h-6 w-6" />
               </Link>
               <div>
                 <h1 className="text-3xl font-bold text-gray-900">Manage Listings</h1>
@@ -113,21 +113,21 @@ export default function AdminListingsPage() {
               href="/admin"
               className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 text-center"
             >
-              <Home className="h-8 w-8 text-indigo-600 mx-auto mb-2" />
+              <HomeIcon className="h-8 w-8 text-indigo-600 mx-auto mb-2" />
               <div className="text-sm font-medium text-gray-900">Dashboard</div>
             </Link>
             <Link 
               href="/admin/users"
               className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 text-center"
             >
-              <Users className="h-8 w-8 text-green-600 mx-auto mb-2" />
+              <UsersIcon className="h-8 w-8 text-green-600 mx-auto mb-2" />
               <div className="text-sm font-medium text-gray-900">Manage Users</div>
             </Link>
             <Link 
               href="/admin/settings"
               className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 text-center"
             >
-              <Settings className="h-8 w-8 text-gray-600 mx-auto mb-2" />
+              <CogIcon className="h-8 w-8 text-gray-600 mx-auto mb-2" />
               <div className="text-sm font-medium text-gray-900">Settings</div>
             </Link>
             <Link 
