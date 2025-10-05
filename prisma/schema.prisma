@@ -41,7 +41,9 @@ model Listing {
   bedrooms    Int
   bathrooms   Int
   state       String
+  district    String?  // District/County
   city        String
+  locality    String?  // Neighborhood/Area/Locality
   address     String?
   lat         Float
   lng         Float

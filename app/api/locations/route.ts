@@ -10,6 +10,8 @@ import {
   searchDistricts,
   getComprehensiveLocationData,
   getNearbyCities,
+  getLocalities,
+  searchLocalities,
   indianCities 
 } from '@/lib/locations/india'
 
@@ -77,6 +79,16 @@ export async function GET(request: NextRequest) {
         data = searchDistricts(query, limit)
         break
 
+      case 'search-localities':
+        if (!query) {
+          return NextResponse.json(
+            { success: false, error: 'Query parameter is required for locality search' },
+            { status: 400 }
+          )
+        }
+        data = searchLocalities(query, limit)
+        break
+
       case 'comprehensive':
         if (!query) {
           return NextResponse.json(
@@ -110,7 +122,7 @@ export async function GET(request: NextRequest) {
 
       default:
         return NextResponse.json(
-          { success: false, error: 'Invalid type parameter. Use: states, districts, cities, search, search-districts, comprehensive, nearby, or city' },
+          { success: false, error: 'Invalid type parameter. Use: states, districts, cities, search, search-districts, search-localities, comprehensive, nearby, or city' },
           { status: 400 }
         )
     }

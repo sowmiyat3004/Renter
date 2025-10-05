@@ -9,6 +9,7 @@ export interface IndianLocation {
   state: string
   city: string
   district?: string
+  locality?: string
   lat: number
   lng: number
 }
@@ -481,12 +482,107 @@ export function getComprehensiveLocationData(query: string, limit: number = 10) 
     )
     .slice(0, limit)
   
+  const localities = getLocalities(query, limit)
+  
   return {
     cities,
     districts,
     states,
-    total: cities.length + districts.length + states.length
+    localities,
+    total: cities.length + districts.length + states.length + localities.length
   }
+}
+
+// Major localities/neighborhoods for major Indian cities
+export const indianLocalities: IndianLocation[] = [
+  // Mumbai localities
+  { state: "Maharashtra", city: "Mumbai", district: "Mumbai", locality: "Bandra West", lat: 19.0544, lng: 72.8406 },
+  { state: "Maharashtra", city: "Mumbai", district: "Mumbai", locality: "Juhu", lat: 19.1074, lng: 72.8263 },
+  { state: "Maharashtra", city: "Mumbai", district: "Mumbai", locality: "Powai", lat: 19.1176, lng: 72.9060 },
+  { state: "Maharashtra", city: "Mumbai", district: "Mumbai", locality: "Andheri West", lat: 19.1197, lng: 72.8464 },
+  { state: "Maharashtra", city: "Mumbai", district: "Mumbai", locality: "Malad West", lat: 19.1868, lng: 72.8486 },
+  { state: "Maharashtra", city: "Mumbai", district: "Mumbai", locality: "Goregaon West", lat: 19.1550, lng: 72.8497 },
+  { state: "Maharashtra", city: "Mumbai", district: "Mumbai", locality: "Borivali West", lat: 19.2307, lng: 72.8567 },
+  { state: "Maharashtra", city: "Mumbai", district: "Mumbai", locality: "Kandivali West", lat: 19.2033, lng: 72.8431 },
+  { state: "Maharashtra", city: "Mumbai", district: "Mumbai", locality: "Santacruz West", lat: 19.1136, lng: 72.8697 },
+  { state: "Maharashtra", city: "Mumbai", district: "Mumbai", locality: "Vile Parle West", lat: 19.0990, lng: 72.8433 },
+  
+  // Delhi localities
+  { state: "Delhi", city: "New Delhi", district: "New Delhi", locality: "Connaught Place", lat: 28.6315, lng: 77.2167 },
+  { state: "Delhi", city: "New Delhi", district: "New Delhi", locality: "Karol Bagh", lat: 28.6517, lng: 77.1909 },
+  { state: "Delhi", city: "New Delhi", district: "New Delhi", locality: "Lajpat Nagar", lat: 28.5670, lng: 77.2431 },
+  { state: "Delhi", city: "New Delhi", district: "New Delhi", locality: "Saket", lat: 28.5304, lng: 77.2177 },
+  { state: "Delhi", city: "New Delhi", district: "New Delhi", locality: "Vasant Kunj", lat: 28.5455, lng: 77.1531 },
+  { state: "Delhi", city: "New Delhi", district: "New Delhi", locality: "Dwarka", lat: 28.5921, lng: 77.0465 },
+  { state: "Delhi", city: "New Delhi", district: "New Delhi", locality: "Rohini", lat: 28.7434, lng: 77.0678 },
+  { state: "Delhi", city: "New Delhi", district: "New Delhi", locality: "Pitampura", lat: 28.6991, lng: 77.1025 },
+  { state: "Delhi", city: "New Delhi", district: "New Delhi", locality: "Janakpuri", lat: 28.6289, lng: 77.0915 },
+  { state: "Delhi", city: "New Delhi", district: "New Delhi", locality: "Rajouri Garden", lat: 28.6448, lng: 77.1206 },
+  
+  // Bangalore localities
+  { state: "Karnataka", city: "Bangalore", district: "Bangalore Urban", locality: "Koramangala", lat: 12.9279, lng: 77.6271 },
+  { state: "Karnataka", city: "Bangalore", district: "Bangalore Urban", locality: "Indiranagar", lat: 12.9716, lng: 77.6412 },
+  { state: "Karnataka", city: "Bangalore", district: "Bangalore Urban", locality: "Whitefield", lat: 12.9698, lng: 77.7500 },
+  { state: "Karnataka", city: "Bangalore", district: "Bangalore Urban", locality: "Electronic City", lat: 12.8456, lng: 77.6603 },
+  { state: "Karnataka", city: "Bangalore", district: "Bangalore Urban", locality: "Marathahalli", lat: 12.9589, lng: 77.7014 },
+  { state: "Karnataka", city: "Bangalore", district: "Bangalore Urban", locality: "HSR Layout", lat: 12.9116, lng: 77.6446 },
+  { state: "Karnataka", city: "Bangalore", district: "Bangalore Urban", locality: "JP Nagar", lat: 12.9063, lng: 77.5851 },
+  { state: "Karnataka", city: "Bangalore", district: "Bangalore Urban", locality: "Bannerghatta Road", lat: 12.8448, lng: 77.5654 },
+  { state: "Karnataka", city: "Bangalore", district: "Bangalore Urban", locality: "BTM Layout", lat: 12.9166, lng: 77.6101 },
+  { state: "Karnataka", city: "Bangalore", district: "Bangalore Urban", locality: "Jayanagar", lat: 12.9308, lng: 77.5838 },
+  
+  // Chennai localities
+  { state: "Tamil Nadu", city: "Chennai", district: "Chennai", locality: "T. Nagar", lat: 13.0418, lng: 80.2341 },
+  { state: "Tamil Nadu", city: "Chennai", district: "Chennai", locality: "Anna Nagar", lat: 13.0827, lng: 80.2707 },
+  { state: "Tamil Nadu", city: "Chennai", district: "Chennai", locality: "Adyar", lat: 13.0067, lng: 80.2206 },
+  { state: "Tamil Nadu", city: "Chennai", district: "Chennai", locality: "Velachery", lat: 12.9816, lng: 80.2206 },
+  { state: "Tamil Nadu", city: "Chennai", district: "Chennai", locality: "Mylapore", lat: 13.0339, lng: 80.2620 },
+  { state: "Tamil Nadu", city: "Chennai", district: "Chennai", locality: "Nungambakkam", lat: 13.0604, lng: 80.2341 },
+  { state: "Tamil Nadu", city: "Chennai", district: "Chennai", locality: "Kilpauk", lat: 13.0827, lng: 80.2341 },
+  { state: "Tamil Nadu", city: "Chennai", district: "Chennai", locality: "Porur", lat: 13.0339, lng: 80.1553 },
+  { state: "Tamil Nadu", city: "Chennai", district: "Chennai", locality: "Tambaram", lat: 12.9246, lng: 80.1270 },
+  { state: "Tamil Nadu", city: "Chennai", district: "Chennai", locality: "Chromepet", lat: 12.9516, lng: 80.1394 },
+  
+  // Hyderabad localities
+  { state: "Telangana", city: "Hyderabad", district: "Hyderabad", locality: "Banjara Hills", lat: 17.4065, lng: 78.4772 },
+  { state: "Telangana", city: "Hyderabad", district: "Hyderabad", locality: "Jubilee Hills", lat: 17.4065, lng: 78.4065 },
+  { state: "Telangana", city: "Hyderabad", district: "Hyderabad", locality: "Gachibowli", lat: 17.4401, lng: 78.3489 },
+  { state: "Telangana", city: "Hyderabad", district: "Hyderabad", locality: "HITEC City", lat: 17.4401, lng: 78.3489 },
+  { state: "Telangana", city: "Hyderabad", district: "Hyderabad", locality: "Kondapur", lat: 17.4849, lng: 78.3904 },
+  { state: "Telangana", city: "Hyderabad", district: "Hyderabad", locality: "Madhapur", lat: 17.4401, lng: 78.3489 },
+  { state: "Telangana", city: "Hyderabad", district: "Hyderabad", locality: "Begumpet", lat: 17.4375, lng: 78.4702 },
+  { state: "Telangana", city: "Hyderabad", district: "Hyderabad", locality: "Secunderabad", lat: 17.4399, lng: 78.4983 },
+  { state: "Telangana", city: "Hyderabad", district: "Hyderabad", locality: "Ameerpet", lat: 17.4375, lng: 78.4702 },
+  { state: "Telangana", city: "Hyderabad", district: "Hyderabad", locality: "Kukatpally", lat: 17.4849, lng: 78.3904 },
+  
+  // Pune localities
+  { state: "Maharashtra", city: "Pune", district: "Pune", locality: "Koregaon Park", lat: 18.5362, lng: 73.8903 },
+  { state: "Maharashtra", city: "Pune", district: "Pune", locality: "Baner", lat: 18.5596, lng: 73.7804 },
+  { state: "Maharashtra", city: "Pune", district: "Pune", locality: "Hinjewadi", lat: 18.5913, lng: 73.7389 },
+  { state: "Maharashtra", city: "Pune", district: "Pune", locality: "Wakad", lat: 18.5913, lng: 73.7389 },
+  { state: "Maharashtra", city: "Pune", district: "Pune", locality: "Aundh", lat: 18.5596, lng: 73.7804 },
+  { state: "Maharashtra", city: "Pune", district: "Pune", locality: "Kothrud", lat: 18.5084, lng: 73.8567 },
+  { state: "Maharashtra", city: "Pune", district: "Pune", locality: "Katraj", lat: 18.4481, lng: 73.8567 },
+  { state: "Maharashtra", city: "Pune", district: "Pune", locality: "Hadapsar", lat: 18.5084, lng: 73.8567 },
+  { state: "Maharashtra", city: "Pune", district: "Pune", locality: "Magarpatta", lat: 18.5084, lng: 73.8567 },
+  { state: "Maharashtra", city: "Pune", district: "Pune", locality: "Viman Nagar", lat: 18.5684, lng: 73.9145 }
+]
+
+export function getLocalities(query: string, limit: number = 10): IndianLocation[] {
+  const lowercaseQuery = query.toLowerCase()
+  
+  return indianLocalities
+    .filter(location => 
+      location.locality?.toLowerCase().includes(lowercaseQuery) ||
+      location.city.toLowerCase().includes(lowercaseQuery) ||
+      location.state.toLowerCase().includes(lowercaseQuery) ||
+      (location.district && location.district.toLowerCase().includes(lowercaseQuery))
+    )
+    .slice(0, limit)
+}
+
+export function searchLocalities(query: string, limit: number = 10): IndianLocation[] {
+  return getLocalities(query, limit)
 }
 
 // Haversine formula to calculate distance between two points

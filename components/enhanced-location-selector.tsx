@@ -7,10 +7,12 @@ import clsx from 'clsx'
 
 interface LocationData {
   id: string
-  type: 'state' | 'district' | 'city'
+  type: 'state' | 'district' | 'city' | 'locality'
   name: string
   state?: string
   district?: string
+  city?: string
+  locality?: string
   lat?: number
   lng?: number
   displayName: string
@@ -118,6 +120,26 @@ export function EnhancedLocationSelector({
           })
         }
         
+        // Add localities (neighborhoods/areas)
+        if (data.data.localities) {
+          data.data.localities.forEach((locality: any) => {
+            allLocations.push({
+              id: `locality-${locality.state}-${locality.city}-${locality.locality}`,
+              type: 'locality',
+              name: locality.locality,
+              state: locality.state,
+              district: locality.district,
+              city: locality.city,
+              locality: locality.locality,
+              lat: locality.lat,
+              lng: locality.lng,
+              displayName: locality.district 
+                ? `${locality.locality}, ${locality.city}, ${locality.district}, ${locality.state}`
+                : `${locality.locality}, ${locality.city}, ${locality.state}`
+            })
+          })
+        }
+        
         setLocations(allLocations)
       }
     } catch (error) {
@@ -165,6 +187,8 @@ export function EnhancedLocationSelector({
         return '🏘️'
       case 'city':
         return '🏙️'
+      case 'locality':
+        return '🏠'
       default:
         return '📍'
     }
@@ -178,6 +202,8 @@ export function EnhancedLocationSelector({
         return 'District'
       case 'city':
         return 'City'
+      case 'locality':
+        return 'Locality'
       default:
         return 'Location'
     }
