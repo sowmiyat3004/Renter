@@ -253,6 +253,32 @@ export default function CreateListingPage() {
             </div>
           </div>
 
+          {/* Amenities */}
+          <div className="bg-white rounded-lg shadow-sm p-6">
+            <h2 className="text-xl font-semibold text-gray-900 mb-6">Amenities</h2>
+            
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {amenities.map((amenity) => (
+                <label key={amenity.id} className="flex items-center space-x-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    value={amenity.id}
+                    checked={selectedAmenities.includes(amenity.id)}
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        setSelectedAmenities([...selectedAmenities, amenity.id])
+                      } else {
+                        setSelectedAmenities(selectedAmenities.filter(id => id !== amenity.id))
+                      }
+                    }}
+                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                  />
+                  <span className="text-sm text-gray-700">{amenity.name}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+
           {/* Location */}
           <div className="bg-white rounded-lg shadow-sm p-6">
             <h2 className="text-xl font-semibold text-gray-900 mb-6">Location</h2>

@@ -565,7 +565,43 @@ export const indianLocalities: IndianLocation[] = [
   { state: "Maharashtra", city: "Pune", district: "Pune", locality: "Katraj", lat: 18.4481, lng: 73.8567 },
   { state: "Maharashtra", city: "Pune", district: "Pune", locality: "Hadapsar", lat: 18.5084, lng: 73.8567 },
   { state: "Maharashtra", city: "Pune", district: "Pune", locality: "Magarpatta", lat: 18.5084, lng: 73.8567 },
-  { state: "Maharashtra", city: "Pune", district: "Pune", locality: "Viman Nagar", lat: 18.5684, lng: 73.9145 }
+  { state: "Maharashtra", city: "Pune", district: "Pune", locality: "Viman Nagar", lat: 18.5684, lng: 73.9145 },
+  
+  // Additional Bangalore localities (Jigani, Bommasandra, etc.)
+  { state: "Karnataka", city: "Bangalore", district: "Bangalore Urban", locality: "Jigani", lat: 12.8000, lng: 77.6000 },
+  { state: "Karnataka", city: "Bangalore", district: "Bangalore Urban", locality: "Bommasandra", lat: 12.8000, lng: 77.6000 },
+  { state: "Karnataka", city: "Bangalore", district: "Bangalore Urban", locality: "Hebbal", lat: 13.0400, lng: 77.6000 },
+  { state: "Karnataka", city: "Bangalore", district: "Bangalore Urban", locality: "Yelahanka", lat: 13.1000, lng: 77.6000 },
+  { state: "Karnataka", city: "Bangalore", district: "Bangalore Urban", locality: "Hennur", lat: 13.0400, lng: 77.6400 },
+  { state: "Karnataka", city: "Bangalore", district: "Bangalore Urban", locality: "Banashankari", lat: 12.9000, lng: 77.5600 },
+  { state: "Karnataka", city: "Bangalore", district: "Bangalore Urban", locality: "Basavanagudi", lat: 12.9400, lng: 77.5700 },
+  { state: "Karnataka", city: "Bangalore", district: "Bangalore Urban", locality: "Malleshwaram", lat: 13.0000, lng: 77.5700 },
+  { state: "Karnataka", city: "Bangalore", district: "Bangalore Urban", locality: "Rajajinagar", lat: 12.9700, lng: 77.5500 },
+  { state: "Karnataka", city: "Bangalore", district: "Bangalore Urban", locality: "Vijayanagar", lat: 12.9700, lng: 77.5300 },
+  
+  // Additional Mumbai localities
+  { state: "Maharashtra", city: "Mumbai", district: "Mumbai", locality: "Versova", lat: 19.1230, lng: 72.8120 },
+  { state: "Maharashtra", city: "Mumbai", district: "Mumbai", locality: "Lokhandwala", lat: 19.1300, lng: 72.8200 },
+  { state: "Maharashtra", city: "Mumbai", district: "Mumbai", locality: "Dahisar West", lat: 19.2507, lng: 72.8567 },
+  { state: "Maharashtra", city: "Mumbai", district: "Mumbai", locality: "Mira Road", lat: 19.2807, lng: 72.8567 },
+  { state: "Maharashtra", city: "Mumbai", district: "Mumbai", locality: "Thane West", lat: 19.2183, lng: 72.9781 },
+  { state: "Maharashtra", city: "Mumbai", district: "Mumbai", locality: "Navi Mumbai", lat: 19.0330, lng: 73.0297 },
+  { state: "Maharashtra", city: "Mumbai", district: "Mumbai", locality: "Chembur", lat: 19.0500, lng: 72.9000 },
+  { state: "Maharashtra", city: "Mumbai", district: "Mumbai", locality: "Ghatkopar", lat: 19.0800, lng: 72.9100 },
+  { state: "Maharashtra", city: "Mumbai", district: "Mumbai", locality: "Kurla", lat: 19.0800, lng: 72.8800 },
+  { state: "Maharashtra", city: "Mumbai", district: "Mumbai", locality: "Sion", lat: 19.0400, lng: 72.8600 },
+  
+  // Additional Delhi localities
+  { state: "Delhi", city: "New Delhi", district: "North Delhi", locality: "Kamla Nagar", lat: 28.6800, lng: 77.2000 },
+  { state: "Delhi", city: "New Delhi", district: "East Delhi", locality: "Shahdara", lat: 28.6800, lng: 77.2800 },
+  { state: "Delhi", city: "New Delhi", district: "East Delhi", locality: "Seelampur", lat: 28.6800, lng: 77.2800 },
+  { state: "Delhi", city: "New Delhi", district: "South Delhi", locality: "Lajpat Nagar", lat: 28.5600, lng: 77.2400 },
+  { state: "Delhi", city: "New Delhi", district: "South Delhi", locality: "Defence Colony", lat: 28.5600, lng: 77.2400 },
+  { state: "Delhi", city: "New Delhi", district: "South Delhi", locality: "Vasant Kunj", lat: 28.5400, lng: 77.1600 },
+  { state: "Delhi", city: "New Delhi", district: "South Delhi", locality: "Dwarka", lat: 28.5800, lng: 77.0400 },
+  { state: "Delhi", city: "New Delhi", district: "North Delhi", locality: "Rohini", lat: 28.7200, lng: 77.1200 },
+  { state: "Delhi", city: "New Delhi", district: "North Delhi", locality: "Pitampura", lat: 28.7000, lng: 77.1400 },
+  { state: "Delhi", city: "New Delhi", district: "North Delhi", locality: "Azadpur", lat: 28.7000, lng: 77.1800 }
 ]
 
 export function getLocalities(query: string, limit: number = 10): IndianLocation[] {

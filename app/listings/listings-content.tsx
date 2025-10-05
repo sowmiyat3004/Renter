@@ -50,11 +50,11 @@ export default function ListingsContent() {
       const data = await response.json()
 
       if (data.success) {
-        setListings(data.data.listings)
+        setListings(data.data || [])
         setPagination(prev => ({
           ...prev,
-          total: data.data.total,
-          totalPages: data.data.totalPages
+          total: data.pagination?.total || 0,
+          totalPages: data.pagination?.totalPages || 0
         }))
       }
     } catch (error) {
