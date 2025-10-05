@@ -199,14 +199,15 @@ export async function POST(request: NextRequest) {
     console.error('Create listing error:', error)
     
     if (error instanceof Error && error.name === 'ZodError') {
+      console.error('Validation error:', error.message)
       return NextResponse.json(
-        { success: false, error: 'Invalid input data' },
+        { success: false, error: 'Invalid input data', details: error.message },
         { status: 400 }
       )
     }
 
     return NextResponse.json(
-      { success: false, error: 'Failed to create listing' },
+      { success: false, error: 'Failed to create listing', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     )
   }

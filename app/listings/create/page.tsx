@@ -87,44 +87,54 @@ export default function CreateListingPage() {
   }
 
   const onSubmit = async (data: any) => {
-    if (uploadedImages.length === 0) {
-      toast.error('Please upload at least one image')
-      return
-    }
+    // Note: Image upload will be handled separately after listing creation
+    // if (uploadedImages.length === 0) {
+    //   toast.error('Please upload at least one image')
+    //   return
+    // }
 
     setIsLoading(true)
     
     try {
-      const formData = new FormData()
-      formData.append('title', data.title)
-      formData.append('description', data.description)
-      formData.append('priceAmount', data.priceAmount.toString())
-      formData.append('bedrooms', data.bedrooms.toString())
-      formData.append('bathrooms', data.bathrooms.toString())
-      formData.append('state', data.state)
-      formData.append('city', data.city)
-      formData.append('lat', data.lat.toString())
-      formData.append('lng', data.lng.toString())
-      formData.append('amenities', JSON.stringify(selectedAmenities))
-      
-      uploadedImages.forEach((image, index) => {
-        formData.append(`images`, image)
-      })
+      // Prepare JSON data for API
+      const listingData = {
+        title: data.title,
+        description: data.description,
+        priceAmount: data.priceAmount,
+        bedrooms: data.bedrooms,
+        bathrooms: data.bathrooms,
+        state: data.state,
+        district: data.district || '',
+        city: data.city,
+        locality: data.locality || '',
+        address: data.address || '',
+        lat: data.lat,
+        lng: data.lng,
+        amenities: selectedAmenities
+      }
+
+      console.log('Submitting listing data:', listingData)
 
       const response = await fetch('/api/listings', {
         method: 'POST',
-        body: formData,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(listingData),
       })
 
       const result = await response.json()
+      console.log('API response:', result)
 
       if (result.success) {
         toast.success('Listing created successfully! It will be reviewed by our admin team.')
         router.push('/dashboard')
       } else {
+        console.error('Listing creation failed:', result.error)
         toast.error(result.error || 'Failed to create listing')
       }
     } catch (error) {
+      console.error('Listing creation error:', error)
       toast.error('Something went wrong. Please try again.')
     } finally {
       setIsLoading(false)
