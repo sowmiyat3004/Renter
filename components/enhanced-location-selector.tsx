@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import { ChevronDownIcon, MapPinIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 import { Combobox } from '@headlessui/react'
 import clsx from 'clsx'
+import { locationAPIService } from '@/lib/locations/api-integration'
 
 interface LocationData {
   id: string
@@ -71,77 +72,106 @@ export function EnhancedLocationSelector({
   const fetchLocations = async (searchQuery: string) => {
     setIsLoading(true)
     try {
+      // Use the new API service for comprehensive location search
+      const apiResults = await locationAPIService.searchPlaces(searchQuery, 'IN')
+      
+      // Also fetch from existing API for backward compatibility
       const response = await fetch(`/api/locations?type=comprehensive&q=${encodeURIComponent(searchQuery)}&limit=20`)
       const data = await response.json()
       
-      if (data.success) {
-        const allLocations: LocationData[] = []
-        
+      const allLocations: LocationData[] = []
+      
+      // Add API results first (higher priority)
+      apiResults.forEach((location) => {
+        allLocations.push({
+          id: location.id,
+          type: location.type,
+          name: location.name,
+          state: location.state,
+          district: location.district,
+          city: location.city,
+          locality: location.locality,
+          lat: location.lat,
+          lng: location.lng,
+          displayName: location.formatted_address
+        })
+      })
+      
+      // Add static data results if API didn't return enough
+      if (data.success && allLocations.length < 10) {
         // Add states
         if (data.data.states) {
           data.data.states.forEach((state: any) => {
-            allLocations.push({
-              id: `state-${state.name}`,
-              type: 'state',
-              name: state.name,
-              displayName: state.name
-            })
+            if (!allLocations.some(loc => loc.name === state.name && loc.type === 'state')) {
+              allLocations.push({
+                id: `state-${state.name}`,
+                type: 'state',
+                name: state.name,
+                displayName: state.name
+              })
+            }
           })
         }
         
         // Add districts
         if (data.data.districts) {
           data.data.districts.forEach((district: any) => {
-            allLocations.push({
-              id: `district-${district.state}-${district.district}`,
-              type: 'district',
-              name: district.district,
-              state: district.state,
-              displayName: `${district.district}, ${district.state}`
-            })
+            if (!allLocations.some(loc => loc.name === district.district && loc.type === 'district')) {
+              allLocations.push({
+                id: `district-${district.state}-${district.district}`,
+                type: 'district',
+                name: district.district,
+                state: district.state,
+                displayName: `${district.district}, ${district.state}`
+              })
+            }
           })
         }
         
         // Add cities
         if (data.data.cities) {
           data.data.cities.forEach((city: any) => {
-            allLocations.push({
-              id: `city-${city.state}-${city.city}`,
-              type: 'city',
-              name: city.city,
-              state: city.state,
-              district: city.district,
-              lat: city.lat,
-              lng: city.lng,
-              displayName: city.district 
-                ? `${city.city}, ${city.district}, ${city.state}`
-                : `${city.city}, ${city.state}`
-            })
+            if (!allLocations.some(loc => loc.name === city.city && loc.type === 'city')) {
+              allLocations.push({
+                id: `city-${city.state}-${city.city}`,
+                type: 'city',
+                name: city.city,
+                state: city.state,
+                district: city.district,
+                lat: city.lat,
+                lng: city.lng,
+                displayName: city.district 
+                  ? `${city.city}, ${city.district}, ${city.state}`
+                  : `${city.city}, ${city.state}`
+              })
+            }
           })
         }
         
         // Add localities (neighborhoods/areas)
         if (data.data.localities) {
           data.data.localities.forEach((locality: any) => {
-            allLocations.push({
-              id: `locality-${locality.state}-${locality.city}-${locality.locality}`,
-              type: 'locality',
-              name: locality.locality,
-              state: locality.state,
-              district: locality.district,
-              city: locality.city,
-              locality: locality.locality,
-              lat: locality.lat,
-              lng: locality.lng,
-              displayName: locality.district 
-                ? `${locality.locality}, ${locality.city}, ${locality.district}, ${locality.state}`
-                : `${locality.locality}, ${locality.city}, ${locality.state}`
-            })
+            if (!allLocations.some(loc => loc.name === locality.locality && loc.type === 'locality')) {
+              allLocations.push({
+                id: `locality-${locality.state}-${locality.city}-${locality.locality}`,
+                type: 'locality',
+                name: locality.locality,
+                state: locality.state,
+                district: locality.district,
+                city: locality.city,
+                locality: locality.locality,
+                lat: locality.lat,
+                lng: locality.lng,
+                displayName: locality.district 
+                  ? `${locality.locality}, ${locality.city}, ${locality.district}, ${locality.state}`
+                  : `${locality.locality}, ${locality.city}, ${locality.state}`
+              })
+            }
           })
         }
-        
-        setLocations(allLocations)
       }
+      
+      setLocations(allLocations.slice(0, 20)) // Limit to 20 results
     } catch (error) {
       console.error('Error fetching locations:', error)
       setLocations([])
