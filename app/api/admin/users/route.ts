@@ -3,12 +3,11 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 
-// GET /api/admin/users - Get users for admin management
 export async function GET(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
     
-    if (!session?.user || (session.user.role !== 'ADMIN' && session.user.role !== 'SUPER_ADMIN')) {
+    if (!session || session.user.role !== 'ADMIN') {
       return NextResponse.json(
         { success: false, error: 'Unauthorized' },
         { status: 401 }
@@ -17,14 +16,13 @@ export async function GET(request: NextRequest) {
 
     const { searchParams } = new URL(request.url)
     const page = parseInt(searchParams.get('page') || '1')
-    const limit = parseInt(searchParams.get('limit') || '10')
-    const search = searchParams.get('search')
-    const role = searchParams.get('role')
-    const sortBy = searchParams.get('sortBy') || 'createdAt'
-    const sortOrder = searchParams.get('sortOrder') || 'desc'
+    const limit = parseInt(searchParams.get('limit') || '50')
+    const search = searchParams.get('search') || ''
+    const role = searchParams.get('role') || ''
 
     const skip = (page - 1) * limit
 
+    // Build where clause
     const where: any = {}
     
     if (search) {
@@ -38,6 +36,7 @@ export async function GET(request: NextRequest) {
       where.role = role
     }
 
+    // Get users with pagination
     const [users, total] = await Promise.all([
       prisma.user.findMany({
         where,
@@ -45,10 +44,10 @@ export async function GET(request: NextRequest) {
           id: true,
           name: true,
           email: true,
+          phone: true,
           role: true,
           createdAt: true,
-          updatedAt: true,
-          emailVerified: true,
+          lastLoginAt: true,
           _count: {
             select: {
               listings: true
@@ -56,15 +55,13 @@ export async function GET(request: NextRequest) {
           }
         },
         orderBy: {
-          [sortBy]: sortOrder
+          createdAt: 'desc'
         },
         skip,
         take: limit
       }),
       prisma.user.count({ where })
     ])
-
-    const totalPages = Math.ceil(total / limit)
 
     return NextResponse.json({
       success: true,
@@ -73,145 +70,13 @@ export async function GET(request: NextRequest) {
         page,
         limit,
         total,
-        totalPages
+        totalPages: Math.ceil(total / limit)
       }
     })
-
   } catch (error) {
-    console.error('Get admin users error:', error)
+    console.error('Error fetching users:', error)
     return NextResponse.json(
       { success: false, error: 'Failed to fetch users' },
-      { status: 500 }
-    )
-  }
-}
-
-// PATCH /api/admin/users - Update user role or status
-export async function PATCH(request: NextRequest) {
-  try {
-    const session = await getServerSession(authOptions)
-    
-    if (!session?.user || session.user.role !== 'SUPER_ADMIN') {
-      return NextResponse.json(
-        { success: false, error: 'Unauthorized - Super Admin access required' },
-        { status: 401 }
-      )
-    }
-
-    const body = await request.json()
-    const { userId, role } = body
-
-    if (!userId) {
-      return NextResponse.json(
-        { success: false, error: 'User ID is required' },
-        { status: 400 }
-      )
-    }
-
-    // Prevent users from changing their own role
-    if (userId === session.user.id) {
-      return NextResponse.json(
-        { success: false, error: 'Cannot modify your own role' },
-        { status: 400 }
-      )
-    }
-
-    const updateData: any = {}
-    
-    if (role && ['USER', 'ADMIN', 'SUPER_ADMIN'].includes(role)) {
-      updateData.role = role
-    }
-    
-
-    if (Object.keys(updateData).length === 0) {
-      return NextResponse.json(
-        { success: false, error: 'No valid fields to update' },
-        { status: 400 }
-      )
-    }
-
-    const updatedUser = await prisma.user.update({
-      where: { id: userId },
-      data: updateData,
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        role: true,
-        updatedAt: true
-      }
-    })
-
-    return NextResponse.json({
-      success: true,
-      data: updatedUser,
-      message: 'User updated successfully'
-    })
-
-  } catch (error) {
-    console.error('Update admin user error:', error)
-    return NextResponse.json(
-      { success: false, error: 'Failed to update user' },
-      { status: 500 }
-    )
-  }
-}
-
-// DELETE /api/admin/users - Delete user (Super Admin only)
-export async function DELETE(request: NextRequest) {
-  try {
-    const session = await getServerSession(authOptions)
-    
-    if (!session?.user || session.user.role !== 'SUPER_ADMIN') {
-      return NextResponse.json(
-        { success: false, error: 'Unauthorized - Super Admin access required' },
-        { status: 401 }
-      )
-    }
-
-    const body = await request.json()
-    const { userId } = body
-
-    if (!userId) {
-      return NextResponse.json(
-        { success: false, error: 'User ID is required' },
-        { status: 400 }
-      )
-    }
-
-    // Prevent users from deleting themselves
-    if (userId === session.user.id) {
-      return NextResponse.json(
-        { success: false, error: 'Cannot delete your own account' },
-        { status: 400 }
-      )
-    }
-
-    // Check if user has listings
-    const userListings = await prisma.listing.count({
-      where: { ownerId: userId }
-    })
-
-    if (userListings > 0) {
-      return NextResponse.json(
-        { success: false, error: 'Cannot delete user with active listings. Please transfer or delete listings first.' },
-        { status: 400 }
-      )
-    }
-
-    await prisma.user.delete({
-      where: { id: userId }
-    })
-
-    return NextResponse.json({
-      success: true,
-      message: 'User deleted successfully'
-    })
-
-  } catch (error) {
-    console.error('Delete admin user error:', error)
-    return NextResponse.json(
-      { success: false, error: 'Failed to delete user' },
       { status: 500 }
     )
   }

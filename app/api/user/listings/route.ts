@@ -53,6 +53,12 @@ export async function GET(request: NextRequest) {
             orderBy: {
               createdAt: 'desc'
             }
+          },
+          _count: {
+            select: {
+              views: true,
+              inquiries: true
+            }
           }
         },
         orderBy: {

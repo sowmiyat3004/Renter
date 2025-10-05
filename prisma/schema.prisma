@@ -16,10 +16,12 @@ model User {
   id            String    @id @default(cuid())
   name          String
   email         String    @unique
+  phone         String?   // Phone number for contact
   passwordHash  String?   @map("password_hash")
   googleId      String?   @unique @map("google_id")
   role          String    @default("USER") // GUEST, USER, ADMIN, SUPER_ADMIN
   emailVerified DateTime? @map("email_verified")
+  lastLoginAt   DateTime? @map("last_login_at")
   createdAt     DateTime  @default(now()) @map("created_at")
   updatedAt     DateTime  @updatedAt @map("updated_at")
 
@@ -27,6 +29,8 @@ model User {
   listings      Listing[]
   adminActions  AdminAction[]
   notifications Notification[]
+  views         PropertyView[]
+  inquiries     PropertyInquiry[]
 
   @@map("users")
 }
@@ -48,6 +52,8 @@ model Listing {
   lat         Float
   lng         Float
   status      String   @default("PENDING") // DRAFT, PENDING, APPROVED, REJECTED, ARCHIVED
+  viewCount   Int      @default(0) @map("view_count")
+  inquiryCount Int     @default(0) @map("inquiry_count")
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 
@@ -56,6 +62,8 @@ model Listing {
   images      ListingImage[]
   amenities   ListingAmenity[]
   adminActions AdminAction[]
+  views       PropertyView[]
+  inquiries   PropertyInquiry[]
 
   @@map("listings")
 }
@@ -127,6 +135,39 @@ model Notification {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("notifications")
+}
+
+model PropertyView {
+  id        String   @id @default(cuid())
+  listingId String   @map("listing_id")
+  userId    String?  @map("user_id") // null for anonymous views
+  ipAddress String?  @map("ip_address")
+  userAgent String?  @map("user_agent")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  // Relations
+  listing   Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  user      User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@map("property_views")
+}
+
+model PropertyInquiry {
+  id        String   @id @default(cuid())
+  listingId String   @map("listing_id")
+  userId    String   @map("user_id")
+  message   String?
+  phone     String?
+  email     String?
+  status    String   @default("PENDING") // PENDING, CONTACTED, CLOSED
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  listing   Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("property_inquiries")
 }
 
 model SystemConfig {
