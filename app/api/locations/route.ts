@@ -15,6 +15,9 @@ import {
   indianCities 
 } from '@/lib/locations/india'
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic'
+
 // GET /api/locations - Get location data
 export async function GET(request: NextRequest) {
   try {

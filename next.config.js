@@ -16,6 +16,14 @@ const nextConfig = {
     SMTP_USER: process.env.SMTP_USER,
     SMTP_PASS: process.env.SMTP_PASS,
   },
+  // Force dynamic rendering for API routes
+  experimental: {
+    serverComponentsExternalPackages: ['@prisma/client']
+  },
+  // Disable static optimization for API routes
+  trailingSlash: false,
+  // Ensure API routes are dynamic
+  output: 'standalone'
 }
 
 module.exports = nextConfig

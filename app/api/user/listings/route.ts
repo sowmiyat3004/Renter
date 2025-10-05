@@ -4,6 +4,9 @@ import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { NotificationService } from '@/lib/notifications'
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic'
+
 // GET /api/user/listings - Get user's listings
 export async function GET(request: NextRequest) {
   try {
