@@ -10,13 +10,25 @@ async function runMigration() {
       id TEXT PRIMARY KEY,
       name TEXT NOT NULL,
       email TEXT UNIQUE NOT NULL,
+      phone TEXT,
       password_hash TEXT,
       google_id TEXT UNIQUE,
       role TEXT DEFAULT 'USER',
       email_verified TIMESTAMP,
+      last_login_at TIMESTAMP,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )
+  `;
+
+  // Add phone column if it doesn't exist
+  await prisma.$executeRaw`
+    ALTER TABLE users ADD COLUMN IF NOT EXISTS phone TEXT
+  `;
+
+  // Add last_login_at column if it doesn't exist
+  await prisma.$executeRaw`
+    ALTER TABLE users ADD COLUMN IF NOT EXISTS last_login_at TIMESTAMP
   `;
 
   await prisma.$executeRaw`
@@ -37,10 +49,21 @@ async function runMigration() {
       lat REAL NOT NULL,
       lng REAL NOT NULL,
       status TEXT DEFAULT 'PENDING',
+      view_count INTEGER DEFAULT 0,
+      inquiry_count INTEGER DEFAULT 0,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY (owner_id) REFERENCES users(id) ON DELETE CASCADE
     )
+  `;
+
+  // Add analytics columns if they don't exist
+  await prisma.$executeRaw`
+    ALTER TABLE listings ADD COLUMN IF NOT EXISTS view_count INTEGER DEFAULT 0
+  `;
+
+  await prisma.$executeRaw`
+    ALTER TABLE listings ADD COLUMN IF NOT EXISTS inquiry_count INTEGER DEFAULT 0
   `;
 
   await prisma.$executeRaw`
@@ -97,6 +120,37 @@ async function runMigration() {
       listing_id TEXT,
       is_read BOOLEAN DEFAULT FALSE,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    )
+  `;
+
+  // Create property views table
+  await prisma.$executeRaw`
+    CREATE TABLE IF NOT EXISTS property_views (
+      id TEXT PRIMARY KEY,
+      listing_id TEXT NOT NULL,
+      user_id TEXT,
+      ip_address TEXT,
+      user_agent TEXT,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (listing_id) REFERENCES listings(id) ON DELETE CASCADE,
+      FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
+    )
+  `;
+
+  // Create property inquiries table
+  await prisma.$executeRaw`
+    CREATE TABLE IF NOT EXISTS property_inquiries (
+      id TEXT PRIMARY KEY,
+      listing_id TEXT NOT NULL,
+      user_id TEXT NOT NULL,
+      message TEXT,
+      phone TEXT,
+      email TEXT,
+      status TEXT DEFAULT 'PENDING',
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (listing_id) REFERENCES listings(id) ON DELETE CASCADE,
       FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
     )
   `;
