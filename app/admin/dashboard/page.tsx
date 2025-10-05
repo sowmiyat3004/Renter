@@ -81,11 +81,17 @@ export default function AdminDashboard() {
 
   const fetchUsers = async () => {
     try {
+      console.log('Fetching users...')
       const response = await fetch('/api/admin/users?limit=10')
       const data = await response.json()
       
+      console.log('Users API response:', data)
+      
       if (data.success) {
         setUsers(data.data)
+        console.log('Users set:', data.data)
+      } else {
+        console.error('Users API error:', data.error)
       }
     } catch (error) {
       console.error('Error fetching users:', error)

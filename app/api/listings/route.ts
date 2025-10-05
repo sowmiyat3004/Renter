@@ -5,6 +5,9 @@ import { prisma } from '@/lib/prisma'
 import { createListingSchema, searchFiltersSchema } from '@/lib/validations'
 import { NotificationService } from '@/lib/notifications'
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic'
+
 // GET /api/listings - Search and filter listings
 export async function GET(request: NextRequest) {
   try {
