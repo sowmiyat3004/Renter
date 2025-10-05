@@ -1031,6 +1031,9 @@ select {
 .top-8 {
   top: 2rem;
 }
+.top-20 {
+  top: 5rem;
+}
 .isolate {
   isolation: isolate;
 }
@@ -1295,6 +1298,9 @@ select {
 .w-3 {
   width: 0.75rem;
 }
+.w-96 {
+  width: 24rem;
+}
 .min-w-full {
   min-width: 100%;
 }
@@ -1457,6 +1463,9 @@ select {
 }
 .items-start {
   align-items: flex-start;
+}
+.items-end {
+  align-items: flex-end;
 }
 .items-center {
   align-items: center;
@@ -2535,6 +2544,10 @@ select {
 .hover\:text-indigo-500:hover {
   --tw-text-opacity: 1;
   color: rgb(99 102 241 / var(--tw-text-opacity, 1));
+}
+.hover\:text-blue-900:hover {
+  --tw-text-opacity: 1;
+  color: rgb(30 58 138 / var(--tw-text-opacity, 1));
 }
 .hover\:shadow-lg:hover {
   --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);

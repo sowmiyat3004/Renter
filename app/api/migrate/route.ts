@@ -13,7 +13,7 @@ async function runMigration() {
       phone TEXT,
       password_hash TEXT,
       google_id TEXT UNIQUE,
-      role TEXT DEFAULT 'USER',
+      role TEXT DEFAULT 'USER' CHECK (role IN ('USER', 'SUPER_ADMIN')),
       email_verified TIMESTAMP,
       last_login_at TIMESTAMP,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
