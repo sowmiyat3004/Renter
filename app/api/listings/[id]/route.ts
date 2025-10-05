@@ -4,6 +4,9 @@ import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { updateListingSchema } from '@/lib/validations'
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic'
+
 // GET /api/listings/[id] - Get single listing
 export async function GET(
   request: NextRequest,
@@ -97,7 +100,10 @@ export async function PUT(
         bedrooms: validatedData.bedrooms,
         bathrooms: validatedData.bathrooms,
         state: validatedData.state,
+        district: validatedData.district,
         city: validatedData.city,
+        locality: validatedData.locality,
+        address: validatedData.address,
         lat: validatedData.lat,
         lng: validatedData.lng,
         // Reset status to pending if significant changes were made
