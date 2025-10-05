@@ -87,11 +87,10 @@ export default function CreateListingPage() {
   }
 
   const onSubmit = async (data: any) => {
-    // Note: Image upload will be handled separately after listing creation
-    // if (uploadedImages.length === 0) {
-    //   toast.error('Please upload at least one image')
-    //   return
-    // }
+    if (uploadedImages.length === 0) {
+      toast.error('Please upload at least one image')
+      return
+    }
 
     setIsLoading(true)
     
@@ -127,6 +126,30 @@ export default function CreateListingPage() {
       console.log('API response:', result)
 
       if (result.success) {
+        // Upload images after listing creation
+        if (uploadedImages.length > 0) {
+          try {
+            const imageFormData = new FormData()
+            uploadedImages.forEach((image, index) => {
+              imageFormData.append('images', image)
+            })
+
+            const imageResponse = await fetch(`/api/listings/${result.data.id}/images`, {
+              method: 'POST',
+              body: imageFormData,
+            })
+
+            const imageResult = await imageResponse.json()
+            if (!imageResult.success) {
+              console.error('Image upload failed:', imageResult.error)
+              toast.error('Listing created but image upload failed')
+            }
+          } catch (imageError) {
+            console.error('Image upload error:', imageError)
+            toast.error('Listing created but image upload failed')
+          }
+        }
+
         toast.success('Listing created successfully! It will be reviewed by our admin team.')
         router.push('/dashboard')
       } else {

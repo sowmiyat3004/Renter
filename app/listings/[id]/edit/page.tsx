@@ -46,6 +46,9 @@ export default function EditListingPage() {
   const [selectedAmenities, setSelectedAmenities] = useState<string[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [uploadedImages, setUploadedImages] = useState<File[]>([])
+  const [existingImages, setExistingImages] = useState<any[]>([])
+  const [isUploadingImages, setIsUploadingImages] = useState(false)
 
   const {
     register,
@@ -93,6 +96,9 @@ export default function EditListingPage() {
         // Set selected amenities
         const amenityIds = listingData.amenities.map((a: any) => a.amenity.id)
         setSelectedAmenities(amenityIds)
+        
+        // Set existing images
+        setExistingImages(listingData.images || [])
       } else {
         toast.error('Failed to load listing')
         router.push('/dashboard')
@@ -125,6 +131,64 @@ export default function EditListingPage() {
         ? prev.filter(id => id !== amenityId)
         : [...prev, amenityId]
     )
+  }
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || [])
+    setUploadedImages(prev => [...prev, ...files])
+  }
+
+  const removeUploadedImage = (index: number) => {
+    setUploadedImages(prev => prev.filter((_, i) => i !== index))
+  }
+
+  const removeExistingImage = async (imageId: string) => {
+    try {
+      const response = await fetch(`/api/listings/${listingId}/images/${imageId}`, {
+        method: 'DELETE',
+      })
+
+      if (response.ok) {
+        setExistingImages(prev => prev.filter(img => img.id !== imageId))
+        toast.success('Image removed successfully')
+      } else {
+        toast.error('Failed to remove image')
+      }
+    } catch (error) {
+      console.error('Error removing image:', error)
+      toast.error('Failed to remove image')
+    }
+  }
+
+  const uploadNewImages = async () => {
+    if (uploadedImages.length === 0) return
+
+    setIsUploadingImages(true)
+    try {
+      const imageFormData = new FormData()
+      uploadedImages.forEach((image) => {
+        imageFormData.append('images', image)
+      })
+
+      const response = await fetch(`/api/listings/${listingId}/images`, {
+        method: 'POST',
+        body: imageFormData,
+      })
+
+      const result = await response.json()
+      if (result.success) {
+        setExistingImages(prev => [...prev, ...result.data])
+        setUploadedImages([])
+        toast.success('Images uploaded successfully')
+      } else {
+        toast.error(result.error || 'Failed to upload images')
+      }
+    } catch (error) {
+      console.error('Error uploading images:', error)
+      toast.error('Failed to upload images')
+    } finally {
+      setIsUploadingImages(false)
+    }
   }
 
   const onSubmit = async (data: any) => {
@@ -349,6 +413,97 @@ export default function EditListingPage() {
                   <span className="text-sm text-gray-700">{amenity.name}</span>
                 </label>
               ))}
+            </div>
+          </div>
+
+          {/* Images */}
+          <div className="bg-white rounded-lg shadow-sm p-6">
+            <h2 className="text-xl font-semibold text-gray-900 mb-6">Property Images</h2>
+            
+            {/* Existing Images */}
+            {existingImages.length > 0 && (
+              <div className="mb-6">
+                <h3 className="text-lg font-medium text-gray-700 mb-4">Current Images</h3>
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                  {existingImages.map((image, index) => (
+                    <div key={image.id} className="relative group">
+                      <img
+                        src={image.url}
+                        alt={`Property image ${index + 1}`}
+                        className="w-full h-32 object-cover rounded-lg"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => removeExistingImage(image.id)}
+                        className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                      >
+                        <X className="h-4 w-4" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Upload New Images */}
+            <div>
+              <h3 className="text-lg font-medium text-gray-700 mb-4">Add New Images</h3>
+              
+              <div className="border-2 border-dashed border-gray-300 rounded-lg p-6">
+                <input
+                  type="file"
+                  multiple
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                  className="hidden"
+                  id="image-upload"
+                />
+                <label
+                  htmlFor="image-upload"
+                  className="cursor-pointer flex flex-col items-center justify-center space-y-2"
+                >
+                  <Upload className="h-8 w-8 text-gray-400" />
+                  <span className="text-sm text-gray-600">Click to upload images</span>
+                  <span className="text-xs text-gray-500">PNG, JPG, GIF up to 10MB each</span>
+                </label>
+              </div>
+
+              {/* Uploaded Images Preview */}
+              {uploadedImages.length > 0 && (
+                <div className="mt-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm font-medium text-gray-700">
+                      {uploadedImages.length} image(s) ready to upload
+                    </span>
+                    <button
+                      type="button"
+                      onClick={uploadNewImages}
+                      disabled={isUploadingImages}
+                      className="px-4 py-2 bg-indigo-600 text-white text-sm rounded-md hover:bg-indigo-700 disabled:opacity-50"
+                    >
+                      {isUploadingImages ? 'Uploading...' : 'Upload Images'}
+                    </button>
+                  </div>
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    {uploadedImages.map((image, index) => (
+                      <div key={index} className="relative group">
+                        <img
+                          src={URL.createObjectURL(image)}
+                          alt={`Upload ${index + 1}`}
+                          className="w-full h-32 object-cover rounded-lg"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => removeUploadedImage(index)}
+                          className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                          <X className="h-4 w-4" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
