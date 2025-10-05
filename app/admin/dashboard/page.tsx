@@ -24,6 +24,19 @@ interface AdminStats {
   totalInquiries: number
 }
 
+interface User {
+  id: string
+  name: string
+  email: string
+  phone?: string
+  role: string
+  createdAt: string
+  lastLoginAt?: string
+  _count: {
+    listings: number
+  }
+}
+
 export default function AdminDashboard() {
   const { data: session, status } = useSession()
   const router = useRouter()
@@ -38,6 +51,8 @@ export default function AdminDashboard() {
     totalInquiries: 0
   })
   const [loading, setLoading] = useState(true)
+  const [users, setUsers] = useState<User[]>([])
+  const [usersLoading, setUsersLoading] = useState(true)
 
   useEffect(() => {
     if (status === 'loading') return
@@ -46,6 +61,7 @@ export default function AdminDashboard() {
       return
     }
     fetchAdminStats()
+    fetchUsers()
   }, [session, status, router])
 
   const fetchAdminStats = async () => {
@@ -60,6 +76,21 @@ export default function AdminDashboard() {
       console.error('Error fetching admin stats:', error)
     } finally {
       setLoading(false)
+    }
+  }
+
+  const fetchUsers = async () => {
+    try {
+      const response = await fetch('/api/admin/users?limit=10')
+      const data = await response.json()
+      
+      if (data.success) {
+        setUsers(data.data)
+      }
+    } catch (error) {
+      console.error('Error fetching users:', error)
+    } finally {
+      setUsersLoading(false)
     }
   }
 
@@ -256,6 +287,63 @@ export default function AdminDashboard() {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+
+        {/* Users List */}
+        <div className="bg-white shadow rounded-lg mb-8">
+          <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+            <h3 className="text-lg font-medium text-gray-900">Recent Users</h3>
+            <Link
+              href="/admin/users"
+              className="text-sm text-indigo-600 hover:text-indigo-500 font-medium"
+            >
+              View All Users →
+            </Link>
+          </div>
+          <div className="divide-y divide-gray-200">
+            {usersLoading ? (
+              <div className="p-6 text-center">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600 mx-auto"></div>
+                <p className="mt-2 text-gray-500">Loading users...</p>
+              </div>
+            ) : users.length === 0 ? (
+              <div className="p-6 text-center text-gray-500">
+                No users found
+              </div>
+            ) : (
+              users.map((user) => (
+                <div key={user.id} className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div className="flex-1">
+                      <div className="flex items-center space-x-3">
+                        <h4 className="text-lg font-medium text-gray-900">{user.name}</h4>
+                        <span className={`px-2 py-1 text-xs font-medium rounded-full ${
+                          user.role === 'SUPER_ADMIN' ? 'bg-purple-100 text-purple-800' :
+                          user.role === 'ADMIN' ? 'bg-blue-100 text-blue-800' :
+                          'bg-gray-100 text-gray-800'
+                        }`}>
+                          {user.role}
+                        </span>
+                      </div>
+                      
+                      <p className="text-gray-600 mt-1">{user.email}</p>
+                      {user.phone && (
+                        <p className="text-gray-500 text-sm">{user.phone}</p>
+                      )}
+                      
+                      <div className="flex items-center space-x-4 mt-2 text-sm text-gray-500">
+                        <span>{user._count.listings} listings</span>
+                        <span>Joined: {new Date(user.createdAt).toLocaleDateString()}</span>
+                        {user.lastLoginAt && (
+                          <span>Last login: {new Date(user.lastLoginAt).toLocaleDateString()}</span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         </div>
 
