@@ -1,19 +1,29 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react'
 import Link from 'next/link'
-import { MapPin, Bed, Bath, Star, Heart, Share2, Phone, Mail, Calendar } from 'lucide-react'
+import { MapPin, Bed, Bath, Star, Heart, Share2, Phone, Mail, Calendar, Eye } from 'lucide-react'
 import { formatPrice } from '@/lib/utils'
 import { ListingWithDetails } from '@/types'
+import { toast } from 'react-hot-toast'
 
 export default function ListingPage() {
   const params = useParams()
+  const router = useRouter()
+  const { data: session, status } = useSession()
   const [listing, setListing] = useState<ListingWithDetails | null>(null)
   const [loading, setLoading] = useState(true)
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [favorites, setFavorites] = useState<Set<string>>(new Set())
   const [showContactForm, setShowContactForm] = useState(false)
+  const [contactDetails, setContactDetails] = useState<{
+    ownerName: string
+    ownerEmail: string
+    ownerPhone: string
+  } | null>(null)
+  const [contactLoading, setContactLoading] = useState(false)
 
   useEffect(() => {
     if (params.id) {
@@ -63,6 +73,37 @@ export default function ListingPage() {
     } else {
       // Fallback to clipboard
       navigator.clipboard.writeText(window.location.href)
+    }
+  }
+
+  const handleContactNumber = async () => {
+    if (!session) {
+      router.push('/auth/signin')
+      return
+    }
+
+    setContactLoading(true)
+    try {
+      const response = await fetch(`/api/listings/${params.id}/contact`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+
+      const result = await response.json()
+
+      if (result.success) {
+        setContactDetails(result.data)
+        toast.success('Contact details revealed!')
+      } else {
+        toast.error(result.error || 'Failed to get contact details')
+      }
+    } catch (error) {
+      console.error('Error fetching contact details:', error)
+      toast.error('Something went wrong. Please try again.')
+    } finally {
+      setContactLoading(false)
     }
   }
 
@@ -260,13 +301,39 @@ export default function ListingPage() {
               </div>
 
               <div className="space-y-4">
-                <button
-                  onClick={() => setShowContactForm(true)}
-                  className="btn-primary w-full flex items-center justify-center"
-                >
-                  <Phone className="h-4 w-4 mr-2" />
-                  Contact Owner
-                </button>
+                {!contactDetails ? (
+                  <button
+                    onClick={handleContactNumber}
+                    disabled={contactLoading}
+                    className="btn-primary w-full flex items-center justify-center"
+                  >
+                    <Eye className="h-4 w-4 mr-2" />
+                    {contactLoading ? 'Loading...' : 'Contact Number'}
+                  </button>
+                ) : (
+                  <div className="space-y-3">
+                    <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
+                      <div className="text-sm font-medium text-green-800 mb-1">Contact Details</div>
+                      <div className="text-sm text-green-700">
+                        <div className="flex items-center mb-1">
+                          <Phone className="h-4 w-4 mr-2" />
+                          {contactDetails.ownerPhone || 'Phone not available'}
+                        </div>
+                        <div className="flex items-center">
+                          <Mail className="h-4 w-4 mr-2" />
+                          {contactDetails.ownerEmail}
+                        </div>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => setShowContactForm(true)}
+                      className="btn-secondary w-full flex items-center justify-center"
+                    >
+                      <Mail className="h-4 w-4 mr-2" />
+                      Send Message
+                    </button>
+                  </div>
+                )}
                 
                 <button className="btn-secondary w-full flex items-center justify-center">
                   <Calendar className="h-4 w-4 mr-2" />

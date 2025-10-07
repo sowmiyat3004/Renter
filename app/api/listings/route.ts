@@ -158,6 +158,18 @@ export async function POST(request: NextRequest) {
         lat: validatedData.lat,
         lng: validatedData.lng,
         status: 'PENDING',
+        // New fields
+        rentType: validatedData.rentType,
+        propertyType: validatedData.propertyType,
+        furnishing: validatedData.furnishing,
+        postedBy: validatedData.postedBy,
+        floorNumber: validatedData.floorNumber,
+        availableFrom: validatedData.availableFrom ? new Date(validatedData.availableFrom) : null,
+        sharingType: validatedData.sharingType,
+        acRoom: validatedData.acRoom,
+        gender: validatedData.gender,
+        bhk: validatedData.bhk,
+        comments: validatedData.comments,
         amenities: {
           create: validatedData.amenities?.map(amenityId => ({
             amenityId

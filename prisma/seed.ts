@@ -9,8 +9,9 @@ async function main() {
   // Create default amenities
   const amenities = [
     'WiFi',
-    'Parking',
     'Air Conditioning',
+    'Car Parking',
+    'Bike Parking',
     'Heating',
     'Washing Machine',
     'Dishwasher',

@@ -28,6 +28,18 @@ export const createListingSchema = z.object({
   address: z.string().optional(),
   lat: z.number().min(-90).max(90),
   lng: z.number().min(-180).max(180),
+  // New fields
+  rentType: z.enum(['HOME', 'PG', 'ROOM_SHARING']).optional(),
+  propertyType: z.string().optional(),
+  furnishing: z.string().optional(),
+  postedBy: z.string().optional(),
+  floorNumber: z.string().optional(),
+  availableFrom: z.string().optional(),
+  sharingType: z.string().optional(),
+  acRoom: z.boolean().optional(),
+  gender: z.string().optional(),
+  bhk: z.string().optional(),
+  comments: z.string().optional(),
   amenities: z.array(z.string()).optional(),
 })
 

@@ -31,6 +31,7 @@ model User {
   notifications Notification[]
   views         PropertyView[]
   inquiries     PropertyInquiry[]
+  contactViews  ContactView[]
 
   @@map("users")
 }
@@ -54,8 +55,28 @@ model Listing {
   status      String   @default("PENDING") // DRAFT, PENDING, APPROVED, REJECTED, ARCHIVED
   viewCount   Int      @default(0) @map("view_count")
   inquiryCount Int     @default(0) @map("inquiry_count")
+  contactViewCount Int @default(0) @map("contact_view_count")
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
+
+  // New property type fields
+  rentType    String?  @map("rent_type") // HOME, PG, ROOM_SHARING
+  propertyType String? @map("property_type") // FLAT, APARTMENT, INDIVIDUAL_HOUSE, FARM_HOUSE
+  furnishing  String?  // UNFURNISHED, SEMI_FURNISHED, FURNISHED
+  postedBy    String?  @map("posted_by") // OWNER, BUILDER, DEALER, SUPERVISOR, TENANT
+  floorNumber String?  @map("floor_number")
+  availableFrom DateTime? @map("available_from")
+  
+  // PG specific fields
+  sharingType String?  @map("sharing_type") // SINGLE, TWO_SHARING, THREE_SHARING, FOUR_SHARING
+  acRoom      Boolean? @map("ac_room")
+  gender      String?  // MALE, FEMALE, ANY
+  
+  // Room sharing specific fields
+  bhk         String?  // 1BHK, 2BHK, 3BHK, 4BHK
+  
+  // Comments
+  comments    String?
 
   // Relations
   owner       User            @relation(fields: [ownerId], references: [id], onDelete: Cascade)
@@ -64,6 +85,7 @@ model Listing {
   adminActions AdminAction[]
   views       PropertyView[]
   inquiries   PropertyInquiry[]
+  contactViews ContactView[]
 
   @@map("listings")
 }
@@ -178,4 +200,18 @@ model SystemConfig {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("system_config")
+}
+
+model ContactView {
+  id        String   @id @default(cuid())
+  listingId String   @map("listing_id")
+  userId    String   @map("user_id")
+  viewedAt  DateTime @default(now()) @map("viewed_at")
+
+  // Relations
+  listing   Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([listingId, userId])
+  @@map("contact_views")
 }
