@@ -6,14 +6,20 @@ interface Broker360LogoProps {
   size?: 'sm' | 'md' | 'lg' | 'xl'
   showText?: boolean
   className?: string
-  variant?: 'default' | 'minimal' | 'professional'
+  variant?: 'default' | 'minimal' | 'professional' | 'custom'
+  customIcon?: React.ReactNode
+  customText?: string
+  customSubtext?: string
 }
 
 export function Broker360Logo({ 
   size = 'md', 
   showText = true, 
   className = '',
-  variant = 'default'
+  variant = 'default',
+  customIcon,
+  customText = 'Broker360',
+  customSubtext = 'Property Solutions'
 }: Broker360LogoProps) {
   const sizeClasses = {
     sm: 'w-8 h-8',
@@ -49,6 +55,17 @@ export function Broker360Logo({
                 <span className="text-white font-bold text-sm">B</span>
               </div>
             </div>
+          </div>
+        )
+      
+      case 'custom':
+        return (
+          <div className={`${sizeClasses[size]} relative flex items-center justify-center`}>
+            {customIcon || (
+              <div className="w-full h-full rounded-full bg-red-500 flex items-center justify-center">
+                <span className="text-white font-bold text-lg">B</span>
+              </div>
+            )}
           </div>
         )
       
@@ -91,10 +108,10 @@ export function Broker360Logo({
       {showText && (
         <div className="flex flex-col">
           <span className={`font-bold text-gray-900 ${textSizeClasses[size]}`}>
-            Broker360
+            {customText}
           </span>
           <span className={`text-red-600 font-medium ${size === 'sm' ? 'text-xs' : 'text-sm'}`}>
-            Property Solutions
+            {customSubtext}
           </span>
         </div>
       )}
