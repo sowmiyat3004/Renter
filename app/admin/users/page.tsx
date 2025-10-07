@@ -24,7 +24,6 @@ export default function AdminUsersPage() {
   const router = useRouter()
   const [users, setUsers] = useState<UserWithDetails[]>([])
   const [loading, setLoading] = useState(true)
-  const [actionLoading, setActionLoading] = useState<string | null>(null)
   const [searchTerm, setSearchTerm] = useState('')
   const [roleFilter, setRoleFilter] = useState('')
   const [pagination, setPagination] = useState({
@@ -79,45 +78,11 @@ export default function AdminUsersPage() {
     }
   }
 
-  const handleRoleChange = async (userId: string, newRole: string) => {
-    setActionLoading(userId)
-    
-    try {
-      const response = await fetch('/api/admin/users', {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          userId,
-          role: newRole
-        }),
-      })
-
-      const result = await response.json()
-
-      if (result.success) {
-        // Update the user in state
-        setUsers(prev => prev.map(user => 
-          user.id === userId 
-            ? { ...user, role: newRole }
-            : user
-        ))
-      } else {
-        alert(result.error || 'Failed to update user role')
-      }
-    } catch (error) {
-      console.error('Error updating user role:', error)
-      alert('Something went wrong. Please try again.')
-    } finally {
-      setActionLoading(null)
-    }
-  }
 
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-500"></div>
       </div>
     )
   }
@@ -156,7 +121,7 @@ export default function AdminUsersPage() {
                 placeholder="Search by name or email..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-400"
               />
             </div>
             <div>
@@ -166,7 +131,7 @@ export default function AdminUsersPage() {
               <select
                 value={roleFilter}
                 onChange={(e) => setRoleFilter(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-400"
               >
                 <option value="">All Roles</option>
                 <option value="USER">User</option>
@@ -177,7 +142,7 @@ export default function AdminUsersPage() {
             <div className="flex items-end">
               <button
                 onClick={fetchUsers}
-                className="w-full px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400"
               >
                 Search
               </button>
@@ -256,30 +221,13 @@ export default function AdminUsersPage() {
                               </div>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="flex items-center space-x-2">
-                                <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                                  user.role === 'SUPER_ADMIN' ? 'bg-red-100 text-red-800' :
-                                  user.role === 'ADMIN' ? 'bg-blue-100 text-blue-800' :
-                                  'bg-gray-100 text-gray-800'
-                                }`}>
-                                  {user.role}
-                                </span>
-                                <select
-                                  value={user.role}
-                                  onChange={(e) => handleRoleChange(user.id, e.target.value)}
-                                  disabled={actionLoading === user.id || user.id === session?.user?.id}
-                                  className="px-2 py-1 border border-gray-300 rounded text-xs disabled:opacity-50"
-                                >
-                                  <option value="USER">User</option>
-                                  <option value="ADMIN">Admin</option>
-                                  {session?.user?.role === 'SUPER_ADMIN' && (
-                                    <option value="SUPER_ADMIN">Super Admin</option>
-                                  )}
-                                </select>
-                                {actionLoading === user.id && (
-                                  <span className="text-xs text-gray-500">Updating...</span>
-                                )}
-                              </div>
+                              <span className={`px-2 py-1 text-xs font-medium rounded-full ${
+                                user.role === 'SUPER_ADMIN' ? 'bg-red-100 text-red-800' :
+                                user.role === 'ADMIN' ? 'bg-red-100 text-red-800' :
+                                'bg-gray-100 text-gray-800'
+                              }`}>
+                                {user.role}
+                              </span>
                             </td>
                           </tr>
                         ))
