@@ -140,7 +140,10 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
+    console.log('Received listing data:', body)
+    
     const validatedData = createListingSchema.parse(body)
+    console.log('Validated data:', validatedData)
 
     const listing = await prisma.listing.create({
       data: {
@@ -213,8 +216,22 @@ export async function POST(request: NextRequest) {
     
     if (error instanceof Error && error.name === 'ZodError') {
       console.error('Validation error:', error.message)
+      console.error('Full error:', error)
+      
+      // Extract specific validation errors
+      const zodError = error as any
+      const fieldErrors = zodError.errors?.map((err: any) => ({
+        field: err.path.join('.'),
+        message: err.message
+      })) || []
+      
       return NextResponse.json(
-        { success: false, error: 'Invalid input data', details: error.message },
+        { 
+          success: false, 
+          error: 'Invalid input data', 
+          details: error.message,
+          fieldErrors: fieldErrors
+        },
         { status: 400 }
       )
     }

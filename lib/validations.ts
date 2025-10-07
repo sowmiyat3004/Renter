@@ -37,7 +37,7 @@ export const createListingSchema = z.object({
   availableFrom: z.string().optional(),
   direction: z.string().optional(),
   sharingType: z.string().optional(),
-  acRoom: z.boolean().optional(),
+  acRoom: z.union([z.boolean(), z.string()]).optional(),
   gender: z.string().optional(),
   bhk: z.string().optional(),
   comments: z.string().optional(),

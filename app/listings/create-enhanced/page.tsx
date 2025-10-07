@@ -128,19 +128,40 @@ export default function CreateListingEnhancedPage() {
     setIsLoading(true)
     
     try {
+      // Validate required fields
+      if (!data.title || data.title.length < 5) {
+        toast.error('Title must be at least 5 characters')
+        return
+      }
+      
+      if (!data.description || data.description.length < 20) {
+        toast.error('Description must be at least 20 characters')
+        return
+      }
+      
+      if (!data.state || !data.city) {
+        toast.error('Please select a valid location')
+        return
+      }
+      
+      if (!data.lat || !data.lng || data.lat === 0 || data.lng === 0) {
+        toast.error('Please select a valid location with coordinates')
+        return
+      }
+
       const listingData = {
         title: data.title,
         description: data.description,
-        priceAmount: data.priceAmount,
-        bedrooms: data.bedrooms,
-        bathrooms: data.bathrooms,
+        priceAmount: Number(data.priceAmount),
+        bedrooms: Number(data.bedrooms),
+        bathrooms: Number(data.bathrooms),
         state: data.state,
         district: data.district || '',
         city: data.city,
         locality: data.locality || '',
         address: data.address || '',
-        lat: data.lat,
-        lng: data.lng,
+        lat: Number(data.lat),
+        lng: Number(data.lng),
         rentType: data.rentType,
         propertyType: data.propertyType,
         furnishing: data.furnishing,
@@ -155,6 +176,8 @@ export default function CreateListingEnhancedPage() {
         comments: data.comments,
         amenities: selectedAmenities
       }
+      
+      console.log('Submitting listing data:', listingData)
 
       const response = await fetch('/api/listings', {
         method: 'POST',
@@ -194,7 +217,16 @@ export default function CreateListingEnhancedPage() {
         toast.success('Listing created successfully! It will be reviewed by our admin team.')
         router.push('/dashboard')
       } else {
-        toast.error(result.error || 'Failed to create listing')
+        console.error('Listing creation failed:', result)
+        
+        // Show specific field errors if available
+        if (result.fieldErrors && result.fieldErrors.length > 0) {
+          result.fieldErrors.forEach((fieldError: any) => {
+            toast.error(`${fieldError.field}: ${fieldError.message}`)
+          })
+        } else {
+          toast.error(result.error || 'Failed to create listing')
+        }
       }
     } catch (error) {
       console.error('Listing creation error:', error)
