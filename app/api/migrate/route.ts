@@ -31,31 +31,44 @@ async function runMigration() {
     ALTER TABLE users ADD COLUMN IF NOT EXISTS last_login_at TIMESTAMP
   `;
 
-  await prisma.$executeRaw`
-    CREATE TABLE IF NOT EXISTS listings (
-      id TEXT PRIMARY KEY,
-      owner_id TEXT NOT NULL,
-      title TEXT NOT NULL,
-      description TEXT NOT NULL,
-      price_amount REAL NOT NULL,
-      currency TEXT DEFAULT 'INR',
-      bedrooms INTEGER NOT NULL,
-      bathrooms INTEGER NOT NULL,
-      state TEXT NOT NULL,
-      district TEXT,
-      city TEXT NOT NULL,
-      locality TEXT,
-      address TEXT,
-      lat REAL NOT NULL,
-      lng REAL NOT NULL,
-      status TEXT DEFAULT 'PENDING',
-      view_count INTEGER DEFAULT 0,
-      inquiry_count INTEGER DEFAULT 0,
-      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-      FOREIGN KEY (owner_id) REFERENCES users(id) ON DELETE CASCADE
-    )
-  `;
+        await prisma.$executeRaw`
+          CREATE TABLE IF NOT EXISTS listings (
+            id TEXT PRIMARY KEY,
+            owner_id TEXT NOT NULL,
+            title TEXT NOT NULL,
+            description TEXT NOT NULL,
+            price_amount REAL NOT NULL,
+            currency TEXT DEFAULT 'INR',
+            bedrooms INTEGER NOT NULL,
+            bathrooms INTEGER NOT NULL,
+            state TEXT NOT NULL,
+            district TEXT,
+            city TEXT NOT NULL,
+            locality TEXT,
+            address TEXT,
+            lat REAL NOT NULL,
+            lng REAL NOT NULL,
+            status TEXT DEFAULT 'PENDING',
+            view_count INTEGER DEFAULT 0,
+            inquiry_count INTEGER DEFAULT 0,
+            contact_view_count INTEGER DEFAULT 0,
+            rent_type TEXT,
+            property_type TEXT,
+            furnishing TEXT,
+            posted_by TEXT,
+            floor_number TEXT,
+            available_from TIMESTAMP,
+            direction TEXT,
+            sharing_type TEXT,
+            ac_room BOOLEAN,
+            gender TEXT,
+            bhk TEXT,
+            comments TEXT,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (owner_id) REFERENCES users(id) ON DELETE CASCADE
+          )
+        `;
 
   // Add analytics columns if they don't exist
   await prisma.$executeRaw`
@@ -155,15 +168,27 @@ async function runMigration() {
     )
   `;
 
-  await prisma.$executeRaw`
-    CREATE TABLE IF NOT EXISTS system_config (
-      id TEXT PRIMARY KEY,
-      key TEXT UNIQUE NOT NULL,
-      value TEXT NOT NULL,
-      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    )
-  `;
+        await prisma.$executeRaw`
+          CREATE TABLE IF NOT EXISTS contact_views (
+            id TEXT PRIMARY KEY,
+            listing_id TEXT NOT NULL,
+            user_id TEXT NOT NULL,
+            viewed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            UNIQUE (listing_id, user_id),
+            FOREIGN KEY (listing_id) REFERENCES listings(id) ON DELETE CASCADE,
+            FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+          )
+        `
+
+        await prisma.$executeRaw`
+          CREATE TABLE IF NOT EXISTS system_config (
+            id TEXT PRIMARY KEY,
+            key TEXT UNIQUE NOT NULL,
+            value TEXT NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+          )
+        `;
 
   console.log('✅ Database tables created successfully');
 

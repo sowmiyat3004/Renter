@@ -16,6 +16,11 @@ export interface ListingWithDetails extends Listing {
   owner: User
   images: ListingImage[]
   amenities: (ListingAmenity & { amenity: Amenity })[]
+  contactViewCount?: number
+  _count?: {
+    views: number
+    inquiries: number
+  }
 }
 
 export interface ListingAmenity {

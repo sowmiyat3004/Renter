@@ -95,7 +95,7 @@ export default function UserDashboard() {
       pendingListings: userListings.filter(l => l.status === 'PENDING').length,
       rejectedListings: userListings.filter(l => l.status === 'REJECTED').length,
       totalInquiries: userListings.reduce((sum, l) => sum + l._count.inquiries, 0),
-      viewedContacts: userListings.reduce((sum, l) => sum + (l.contactViewCount || 0), 0)
+      viewedContacts: userListings.reduce((sum, l) => sum + ((l as any).contactViewCount || 0), 0)
     }
     setStats(stats)
   }
