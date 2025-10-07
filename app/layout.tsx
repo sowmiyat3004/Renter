@@ -8,22 +8,22 @@ import { FixedHeader } from '@/components/fixed-header'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Renter - Find Your Perfect Rental Property',
-  description: 'Discover and list rental properties with ease. Browse through verified listings, find properties near you, and manage your own listings.',
-  keywords: ['rental', 'property', 'real estate', 'housing', 'apartment', 'house'],
-  authors: [{ name: 'Renter Team' }],
+  title: 'Broker360 - Professional Property Management Platform',
+  description: 'Professional property management platform with comprehensive listing management, user verification, and advanced search capabilities.',
+  keywords: ['property management', 'real estate', 'broker', 'property listings', 'rental management', 'property search'],
+  authors: [{ name: 'Broker360 Team' }],
   viewport: 'width=device-width, initial-scale=1',
   robots: 'index, follow',
   openGraph: {
-    title: 'Renter - Find Your Perfect Rental Property',
-    description: 'Discover and list rental properties with ease.',
+    title: 'Broker360 - Professional Property Management Platform',
+    description: 'Professional property management with comprehensive listing management.',
     type: 'website',
     locale: 'en_US',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Renter - Find Your Perfect Rental Property',
-    description: 'Discover and list rental properties with ease.',
+    title: 'Broker360 - Professional Property Management Platform',
+    description: 'Professional property management with comprehensive listing management.',
   },
 }
 

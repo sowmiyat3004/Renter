@@ -143,40 +143,6 @@ export default function AdminUsersPage() {
           </div>
         </div>
 
-        {/* Quick Actions */}
-        <div className="bg-white rounded-lg shadow p-6 mb-8">
-          <h3 className="text-lg font-medium text-gray-900 mb-4">Quick Actions</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <Link 
-              href="/admin"
-              className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 text-center"
-            >
-              <HomeIcon className="h-8 w-8 text-indigo-600 mx-auto mb-2" />
-              <div className="text-sm font-medium text-gray-900">Dashboard</div>
-            </Link>
-            <Link 
-              href="/admin/listings"
-              className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 text-center"
-            >
-              <HomeIcon className="h-8 w-8 text-green-600 mx-auto mb-2" />
-              <div className="text-sm font-medium text-gray-900">Manage Listings</div>
-            </Link>
-            <Link 
-              href="/admin/settings"
-              className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 text-center"
-            >
-              <CogIcon className="h-8 w-8 text-gray-600 mx-auto mb-2" />
-              <div className="text-sm font-medium text-gray-900">Settings</div>
-            </Link>
-            <Link 
-              href="/admin/reports"
-              className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 text-center"
-            >
-              <ChartBarIcon className="h-8 w-8 text-purple-600 mx-auto mb-2" />
-              <div className="text-sm font-medium text-gray-900">Reports</div>
-            </Link>
-          </div>
-        </div>
 
         {/* Search and Filters */}
         <div className="bg-white rounded-lg shadow p-6 mb-6">
@@ -219,76 +185,108 @@ export default function AdminUsersPage() {
           </div>
         </div>
 
-        {/* Users */}
-        <div className="bg-white rounded-lg shadow">
-          <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
-            <h3 className="text-lg font-medium text-gray-900">
-              All Users ({pagination.total})
-            </h3>
-            <div className="text-sm text-gray-500">
-              Page {pagination.page} of {pagination.totalPages}
-            </div>
-          </div>
-          
-          <div className="divide-y divide-gray-200">
-            {users.length === 0 ? (
-              <div className="p-6 text-center text-gray-500">
-                No users found
-              </div>
-            ) : (
-              users.map((user) => (
-                <div key={user.id} className="p-6">
-                  <div className="flex items-center justify-between">
-                    <div className="flex-1">
-                      <div className="flex items-center space-x-3">
-                        <h4 className="text-lg font-medium text-gray-900">{user.name}</h4>
-                        <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                          user.role === 'SUPER_ADMIN' ? 'bg-purple-100 text-purple-800' :
-                          user.role === 'ADMIN' ? 'bg-blue-100 text-blue-800' :
-                          user.role === 'MODERATOR' ? 'bg-green-100 text-green-800' :
-                          'bg-gray-100 text-gray-800'
-                        }`}>
-                          {user.role}
-                        </span>
-                      </div>
-                      
-                      <p className="text-gray-600 mt-1">{user.email}</p>
-                      {user.phone && (
-                        <p className="text-gray-500 text-sm">{user.phone}</p>
-                      )}
-                      
-                      <div className="flex items-center space-x-4 mt-2 text-sm text-gray-500">
-                        <span>{user._count.listings} listings</span>
-                        <span>Joined: {new Date(user.createdAt).toLocaleDateString()}</span>
-                        {user.lastLoginAt && (
-                          <span>Last login: {new Date(user.lastLoginAt).toLocaleDateString()}</span>
-                        )}
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-center space-x-2 ml-4">
-                      <select
-                        value={user.role}
-                        onChange={(e) => handleRoleChange(user.id, e.target.value)}
-                        disabled={actionLoading === user.id || user.id === session?.user?.id}
-                        className="px-3 py-1 border border-gray-300 rounded text-sm disabled:opacity-50"
-                      >
-                        <option value="USER">User</option>
-                        <option value="MODERATOR">Moderator</option>
-                        <option value="ADMIN">Admin</option>
-                        {session?.user?.role === 'SUPER_ADMIN' && (
-                          <option value="SUPER_ADMIN">Super Admin</option>
-                        )}
-                      </select>
-                      {actionLoading === user.id && (
-                        <span className="text-sm text-gray-500">Updating...</span>
-                      )}
-                    </div>
-                  </div>
+              {/* Users Table */}
+              <div className="bg-white rounded-lg shadow overflow-hidden">
+                <div className="px-6 py-4 border-b border-gray-200">
+                  <h3 className="text-lg font-medium text-gray-900">
+                    All Users ({pagination.total})
+                  </h3>
                 </div>
-              ))
-            )}
-          </div>
+                
+                <div className="overflow-x-auto">
+                  <table className="min-w-full divide-y divide-gray-200">
+                    <thead className="bg-gray-50">
+                      <tr>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Username
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Email
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Full Name
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Mobile Number
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          When Created
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Last Active
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Role
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-200">
+                      {users.length === 0 ? (
+                        <tr>
+                          <td colSpan={7} className="px-6 py-4 text-center text-gray-500">
+                            No users found
+                          </td>
+                        </tr>
+                      ) : (
+                        users.map((user) => (
+                          <tr key={user.id} className="hover:bg-gray-50">
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <div className="text-sm font-medium text-gray-900">{user.name}</div>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <div className="text-sm text-gray-900">{user.email}</div>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <div className="text-sm text-gray-900">{user.name}</div>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <div className="text-sm text-gray-900">{user.phone || 'N/A'}</div>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <div className="text-sm text-gray-900">
+                                {new Date(user.createdAt).toLocaleDateString()}
+                              </div>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <div className="text-sm text-gray-900">
+                                {user.lastLoginAt 
+                                  ? new Date(user.lastLoginAt).toLocaleDateString()
+                                  : 'Never'
+                                }
+                              </div>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <div className="flex items-center space-x-2">
+                                <span className={`px-2 py-1 text-xs font-medium rounded-full ${
+                                  user.role === 'SUPER_ADMIN' ? 'bg-red-100 text-red-800' :
+                                  user.role === 'ADMIN' ? 'bg-blue-100 text-blue-800' :
+                                  'bg-gray-100 text-gray-800'
+                                }`}>
+                                  {user.role}
+                                </span>
+                                <select
+                                  value={user.role}
+                                  onChange={(e) => handleRoleChange(user.id, e.target.value)}
+                                  disabled={actionLoading === user.id || user.id === session?.user?.id}
+                                  className="px-2 py-1 border border-gray-300 rounded text-xs disabled:opacity-50"
+                                >
+                                  <option value="USER">User</option>
+                                  <option value="ADMIN">Admin</option>
+                                  {session?.user?.role === 'SUPER_ADMIN' && (
+                                    <option value="SUPER_ADMIN">Super Admin</option>
+                                  )}
+                                </select>
+                                {actionLoading === user.id && (
+                                  <span className="text-xs text-gray-500">Updating...</span>
+                                )}
+                              </div>
+                            </td>
+                          </tr>
+                        ))
+                      )}
+                    </tbody>
+                  </table>
+                </div>
           
           {/* Pagination */}
           {pagination.totalPages > 1 && (

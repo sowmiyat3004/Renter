@@ -7,7 +7,7 @@ export default function AdminDashboard() {
   const router = useRouter()
   
   useEffect(() => {
-    router.push('/admin/enhanced-dashboard')
+    router.push('/admin/simple-dashboard')
   }, [router])
   
   return (

@@ -44,7 +44,6 @@ interface UserStats {
   approvedListings: number
   pendingListings: number
   rejectedListings: number
-  totalViews: number
   totalInquiries: number
 }
 
@@ -57,7 +56,6 @@ export default function UserDashboard() {
     approvedListings: 0,
     pendingListings: 0,
     rejectedListings: 0,
-    totalViews: 0,
     totalInquiries: 0
   })
   const [loading, setLoading] = useState(true)
@@ -94,7 +92,6 @@ export default function UserDashboard() {
       approvedListings: userListings.filter(l => l.status === 'APPROVED').length,
       pendingListings: userListings.filter(l => l.status === 'PENDING').length,
       rejectedListings: userListings.filter(l => l.status === 'REJECTED').length,
-      totalViews: userListings.reduce((sum, l) => sum + l._count.views, 0),
       totalInquiries: userListings.reduce((sum, l) => sum + l._count.inquiries, 0)
     }
     setStats(stats)
@@ -169,7 +166,7 @@ export default function UserDashboard() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           <div className="bg-white overflow-hidden shadow rounded-lg">
             <div className="p-5">
               <div className="flex items-center">
@@ -210,25 +207,6 @@ export default function UserDashboard() {
             </div>
           </div>
 
-          <div className="bg-white overflow-hidden shadow rounded-lg">
-            <div className="p-5">
-              <div className="flex items-center">
-                <div className="flex-shrink-0">
-                  <EyeIcon className="h-6 w-6 text-blue-400" />
-                </div>
-                <div className="ml-5 w-0 flex-1">
-                  <dl>
-                    <dt className="text-sm font-medium text-gray-500 truncate">
-                      Total Views
-                    </dt>
-                    <dd className="text-lg font-medium text-gray-900">
-                      {stats.totalViews}
-                    </dd>
-                  </dl>
-                </div>
-              </div>
-            </div>
-          </div>
 
           <div className="bg-white overflow-hidden shadow rounded-lg">
             <div className="p-5">
