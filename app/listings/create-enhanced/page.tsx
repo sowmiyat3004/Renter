@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'react-hot-toast'
 import { ArrowLeft, Upload, X, MapPin, Home, Bed, Bath, Calendar, Users, Building } from 'lucide-react'
-import { EnhancedLocationSelector } from '@/components/enhanced-location-selector'
+import { GoogleLocationSelector } from '@/components/google-location-selector'
 
 interface Amenity {
   id: string
@@ -452,6 +452,23 @@ export default function CreateListingEnhancedPage() {
                     className="input"
                   />
                 </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Direction of House
+                  </label>
+                  <select {...register('direction')} className="input">
+                    <option value="">Select direction</option>
+                    <option value="NORTH">North</option>
+                    <option value="SOUTH">South</option>
+                    <option value="EAST">East</option>
+                    <option value="WEST">West</option>
+                    <option value="NORTHEAST">Northeast</option>
+                    <option value="NORTHWEST">Northwest</option>
+                    <option value="SOUTHEAST">Southeast</option>
+                    <option value="SOUTHWEST">Southwest</option>
+                  </select>
+                </div>
               </div>
             </div>
           )}
@@ -693,7 +710,7 @@ export default function CreateListingEnhancedPage() {
             <h2 className="text-xl font-semibold text-gray-900 mb-6">Location</h2>
             
             <div className="space-y-6">
-              <EnhancedLocationSelector
+              <GoogleLocationSelector
                 label="Location *"
                 value={watch('location')}
                 onChange={(location) => {
@@ -704,6 +721,7 @@ export default function CreateListingEnhancedPage() {
                     setValue('locality', location.locality || '')
                     setValue('lat', location.lat || 0)
                     setValue('lng', location.lng || 0)
+                    setValue('location', location)
                   } else {
                     setValue('city', '')
                     setValue('state', '')
@@ -711,6 +729,7 @@ export default function CreateListingEnhancedPage() {
                     setValue('locality', '')
                     setValue('lat', 0)
                     setValue('lng', 0)
+                    setValue('location', null)
                   }
                 }}
                 onAddressChange={(address) => setValue('address', address)}

@@ -35,6 +35,7 @@ export const createListingSchema = z.object({
   postedBy: z.string().optional(),
   floorNumber: z.string().optional(),
   availableFrom: z.string().optional(),
+  direction: z.string().optional(),
   sharingType: z.string().optional(),
   acRoom: z.boolean().optional(),
   gender: z.string().optional(),

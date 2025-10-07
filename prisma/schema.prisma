@@ -66,6 +66,7 @@ model Listing {
   postedBy    String?  @map("posted_by") // OWNER, BUILDER, DEALER, SUPERVISOR, TENANT
   floorNumber String?  @map("floor_number")
   availableFrom DateTime? @map("available_from")
+  direction  String?  // NORTH, SOUTH, EAST, WEST, NORTHEAST, NORTHWEST, SOUTHEAST, SOUTHWEST
   
   // PG specific fields
   sharingType String?  @map("sharing_type") // SINGLE, TWO_SHARING, THREE_SHARING, FOUR_SHARING

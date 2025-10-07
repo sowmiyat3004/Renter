@@ -165,6 +165,7 @@ export async function POST(request: NextRequest) {
         postedBy: validatedData.postedBy,
         floorNumber: validatedData.floorNumber,
         availableFrom: validatedData.availableFrom ? new Date(validatedData.availableFrom) : null,
+        direction: validatedData.direction,
         sharingType: validatedData.sharingType,
         acRoom: validatedData.acRoom,
         gender: validatedData.gender,

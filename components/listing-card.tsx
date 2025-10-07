@@ -108,21 +108,21 @@ export function ListingCard({ listing, viewMode }: ListingCardProps) {
             {/* Amenities */}
             {listing.amenities.length > 0 && (
               <div className="mb-4">
-                <div className="flex flex-wrap gap-1">
+                <div className="text-sm font-medium text-gray-700 mb-2">Amenities:</div>
+                <ul className="space-y-1">
                   {listing.amenities.slice(0, 4).map((amenity) => (
-                    <span
-                      key={amenity.id}
-                      className="inline-block bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded"
-                    >
+                    <li key={amenity.id} className="flex items-center text-sm text-gray-600">
+                      <span className="w-1.5 h-1.5 bg-red-500 rounded-full mr-2"></span>
                       {amenity.amenity.name}
-                    </span>
+                    </li>
                   ))}
                   {listing.amenities.length > 4 && (
-                    <span className="inline-block bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded">
-                      +{listing.amenities.length - 4} more
-                    </span>
+                    <li className="flex items-center text-sm text-gray-500">
+                      <span className="w-1.5 h-1.5 bg-gray-400 rounded-full mr-2"></span>
+                      +{listing.amenities.length - 4} more amenities
+                    </li>
                   )}
-                </div>
+                </ul>
               </div>
             )}
 
@@ -217,21 +217,21 @@ export function ListingCard({ listing, viewMode }: ListingCardProps) {
         {/* Amenities */}
         {listing.amenities.length > 0 && (
           <div className="mb-4">
-            <div className="flex flex-wrap gap-1">
+            <div className="text-sm font-medium text-gray-700 mb-2">Amenities:</div>
+            <ul className="space-y-1">
               {listing.amenities.slice(0, 3).map((amenity) => (
-                <span
-                  key={amenity.id}
-                  className="inline-block bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded"
-                >
+                <li key={amenity.id} className="flex items-center text-sm text-gray-600">
+                  <span className="w-1.5 h-1.5 bg-red-500 rounded-full mr-2"></span>
                   {amenity.amenity.name}
-                </span>
+                </li>
               ))}
               {listing.amenities.length > 3 && (
-                <span className="inline-block bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded">
-                  +{listing.amenities.length - 3} more
-                </span>
+                <li className="flex items-center text-sm text-gray-500">
+                  <span className="w-1.5 h-1.5 bg-gray-400 rounded-full mr-2"></span>
+                  +{listing.amenities.length - 3} more amenities
+                </li>
               )}
-            </div>
+            </ul>
           </div>
         )}
 
