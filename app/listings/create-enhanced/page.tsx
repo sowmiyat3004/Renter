@@ -36,7 +36,7 @@ interface CreateListingForm {
   availableFrom?: string
   direction?: string
   sharingType?: string
-  acRoom?: boolean
+  acRoom?: string
   gender?: string
   bhk?: string
   comments?: string
@@ -149,7 +149,7 @@ export default function CreateListingEnhancedPage() {
         availableFrom: data.availableFrom,
         direction: data.direction,
         sharingType: data.sharingType,
-        acRoom: data.acRoom,
+        acRoom: data.acRoom === 'true' ? true : data.acRoom === 'false' ? false : undefined,
         gender: data.gender,
         bhk: data.bhk,
         comments: data.comments,
@@ -498,7 +498,7 @@ export default function CreateListingEnhancedPage() {
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     AC Room
                   </label>
-                  <select {...register('acRoom', { valueAsBoolean: true })} className="input">
+                  <select {...register('acRoom')} className="input">
                     <option value="">Select AC</option>
                     <option value="true">AC Room</option>
                     <option value="false">Non AC Room</option>
