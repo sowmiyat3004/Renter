@@ -44,19 +44,21 @@ class LocationFallbackService {
       
       // Add localities
       results.localities.forEach(locality => {
-        locations.push({
-          id: `locality_${locality.locality}_${locality.city}`,
-          name: locality.locality,
-          formatted_address: `${locality.locality}, ${locality.city}, ${locality.state}, India`,
-          lat: locality.lat,
-          lng: locality.lng,
-          state: locality.state,
-          district: locality.district || '',
-          city: locality.city,
-          locality: locality.locality,
-          country: 'India',
-          postal_code: ''
-        })
+        if (locality.locality) { // Only add if locality exists
+          locations.push({
+            id: `locality_${locality.locality}_${locality.city}`,
+            name: locality.locality,
+            formatted_address: `${locality.locality}, ${locality.city}, ${locality.state}, India`,
+            lat: locality.lat,
+            lng: locality.lng,
+            state: locality.state,
+            district: locality.district || '',
+            city: locality.city,
+            locality: locality.locality,
+            country: 'India',
+            postal_code: ''
+          })
+        }
       })
       
       // Add states (states don't have lat/lng, so we'll skip them for now)
