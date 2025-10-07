@@ -39,22 +39,8 @@ class LocationFallbackService {
         })
       })
       
-      // Add districts
-      results.districts.forEach(district => {
-        locations.push({
-          id: `district_${district.district}_${district.state}`,
-          name: district.district,
-          formatted_address: `${district.district}, ${district.state}, India`,
-          lat: district.lat,
-          lng: district.lng,
-          state: district.state,
-          district: district.district,
-          city: '',
-          locality: '',
-          country: 'India',
-          postal_code: ''
-        })
-      })
+      // Add districts (districts don't have lat/lng, so we'll skip them for now)
+      // We'll focus on cities and localities which have coordinates
       
       // Add localities
       results.localities.forEach(locality => {
@@ -73,22 +59,8 @@ class LocationFallbackService {
         })
       })
       
-      // Add states
-      results.states.forEach(state => {
-        locations.push({
-          id: `state_${state.state}`,
-          name: state.state,
-          formatted_address: `${state.state}, India`,
-          lat: state.lat,
-          lng: state.lng,
-          state: state.state,
-          district: '',
-          city: '',
-          locality: '',
-          country: 'India',
-          postal_code: ''
-        })
-      })
+      // Add states (states don't have lat/lng, so we'll skip them for now)
+      // We'll focus on cities and localities which have coordinates
       
       return locations.slice(0, 10) // Limit to 10 results
     } catch (error) {
@@ -111,8 +83,7 @@ class LocationFallbackService {
     
     const match = allLocations.find(loc => {
       if (type === 'city') return loc.city.toLowerCase().includes(name.toLowerCase())
-      if (type === 'district') return loc.district?.toLowerCase().includes(name.toLowerCase())
-      if (type === 'state') return loc.state.toLowerCase().includes(name.toLowerCase())
+      if (type === 'locality') return loc.locality?.toLowerCase().includes(name.toLowerCase())
       return false
     })
     
