@@ -1,0 +1,219 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Note: SQLite doesn't support enums, so we use String with constraints
+
+model User {
+  id            String    @id @default(cuid())
+  name          String
+  email         String    @unique
+  phone         String?   // Phone number for contact
+  passwordHash  String?   @map("password_hash")
+  googleId      String?   @unique @map("google_id")
+  role          String    @default("USER") // GUEST, USER, ADMIN, SUPER_ADMIN
+  emailVerified DateTime? @map("email_verified")
+  lastLoginAt   DateTime? @map("last_login_at")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  // Relations
+  listings      Listing[]
+  adminActions  AdminAction[]
+  notifications Notification[]
+  views         PropertyView[]
+  inquiries     PropertyInquiry[]
+  contactViews  ContactView[]
+
+  @@map("users")
+}
+
+model Listing {
+  id          String   @id @default(cuid())
+  ownerId     String   @map("owner_id")
+  title       String
+  description String
+  priceAmount Float    @map("price_amount")
+  currency    String   @default("INR")
+  bedrooms    Int
+  bathrooms   Int
+  state       String
+  district    String?  // District/County
+  city        String
+  locality    String?  // Neighborhood/Area/Locality
+  address     String?
+  lat         Float
+  lng         Float
+  status      String   @default("PENDING") // DRAFT, PENDING, APPROVED, REJECTED, ARCHIVED
+  viewCount   Int      @default(0) @map("view_count")
+  inquiryCount Int     @default(0) @map("inquiry_count")
+  contactViewCount Int @default(0) @map("contact_view_count")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  // Property type fields
+  rentType    String?  @map("rent_type") // HOME, PG, ROOM_SHARING
+  propertyType String? @map("property_type") // FLAT, APARTMENT, INDIVIDUAL_HOUSE, FARM_HOUSE
+  furnishing  String?  // UNFURNISHED, SEMI_FURNISHED, FURNISHED
+  postedBy    String?  @map("posted_by") // OWNER, BUILDER, DEALER, SUPERVISOR, TENANT
+  floorNumber String?  @map("floor_number")
+  availableFrom DateTime? @map("available_from")
+  direction  String?  // NORTH, SOUTH, EAST, WEST, NORTHEAST, NORTHWEST, SOUTHEAST, SOUTHWEST
+  
+  // PG specific fields
+  sharingType String?  @map("sharing_type") // SINGLE, TWO_SHARING, THREE_SHARING, FOUR_SHARING
+  acRoom      Boolean? @map("ac_room")
+  gender      String?  // MALE, FEMALE, ANY
+  
+  // Room sharing specific fields
+  bhk         String?  // 1BHK, 2BHK, 3BHK, 4BHK
+  
+  // Comments
+  comments    String?
+
+  // Relations
+  owner       User            @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  images      ListingImage[]
+  amenities   ListingAmenity[]
+  adminActions AdminAction[]
+  views       PropertyView[]
+  inquiries   PropertyInquiry[]
+  contactViews ContactView[]
+
+  @@map("listings")
+}
+
+model ListingImage {
+  id        String   @id @default(cuid())
+  listingId String   @map("listing_id")
+  url       String
+  isPrimary Boolean  @default(false) @map("is_primary")
+  width     Int?
+  height    Int?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  // Relations
+  listing   Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+
+  @@map("listing_images")
+}
+
+model Amenity {
+  id   String @id @default(cuid())
+  name String @unique
+
+  // Relations
+  listingAmenities ListingAmenity[]
+
+  @@map("amenities")
+}
+
+model ListingAmenity {
+  id        String  @id @default(cuid())
+  listingId String  @map("listing_id")
+  amenityId String  @map("amenity_id")
+
+  // Relations
+  listing   Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  amenity   Amenity @relation(fields: [amenityId], references: [id], onDelete: Cascade)
+
+  @@unique([listingId, amenityId])
+  @@map("listing_amenities")
+}
+
+model AdminAction {
+  id         String   @id @default(cuid())
+  adminId    String   @map("admin_id")
+  listingId  String   @map("listing_id")
+  actionType String   @map("action_type") // APPROVE, REJECT, SUSPEND, DELETE
+  reason     String?
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  // Relations
+  admin      User    @relation(fields: [adminId], references: [id], onDelete: Cascade)
+  listing    Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+
+  @@map("admin_actions")
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String   @map("user_id")
+  title     String
+  message   String
+  type      String   @default("INFO") // INFO, ALERT, WARNING, SUCCESS
+  listingId String?  @map("listing_id")
+  isRead    Boolean  @default(false) @map("is_read")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  // Relations
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  listing   Listing? @relation(fields: [listingId], references: [id], onDelete: SetNull)
+
+  @@map("notifications")
+}
+
+model PropertyView {
+  id        String   @id @default(cuid())
+  listingId String   @map("listing_id")
+  userId    String?  @map("user_id")
+  ipAddress String?  @map("ip_address")
+  userAgent String?  @map("user_agent")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  // Relations
+  listing   Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  user      User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@map("property_views")
+}
+
+model PropertyInquiry {
+  id        String   @id @default(cuid())
+  listingId String   @map("listing_id")
+  userId    String   @map("user_id")
+  message   String?
+  phone     String?
+  email     String?
+  status    String   @default("PENDING") // PENDING, CONTACTED, CLOSED
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  listing   Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("property_inquiries")
+}
+
+model ContactView {
+  id        String   @id @default(cuid())
+  listingId String   @map("listing_id")
+  userId    String   @map("user_id")
+  viewedAt  DateTime @default(now()) @map("viewed_at")
+
+  // Relations
+  listing   Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([listingId, userId])
+  @@map("contact_views")
+}
+
+model SystemConfig {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("system_config")
+}

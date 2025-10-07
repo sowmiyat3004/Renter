@@ -6,9 +6,15 @@ interface Broker360LogoProps {
   size?: 'sm' | 'md' | 'lg' | 'xl'
   showText?: boolean
   className?: string
+  variant?: 'default' | 'minimal' | 'professional'
 }
 
-export function Broker360Logo({ size = 'md', showText = true, className = '' }: Broker360LogoProps) {
+export function Broker360Logo({ 
+  size = 'md', 
+  showText = true, 
+  className = '',
+  variant = 'default'
+}: Broker360LogoProps) {
   const sizeClasses = {
     sm: 'w-8 h-8',
     md: 'w-12 h-12',
@@ -23,34 +29,63 @@ export function Broker360Logo({ size = 'md', showText = true, className = '' }: 
     xl: 'text-2xl'
   }
 
+  const renderLogo = () => {
+    switch (variant) {
+      case 'minimal':
+        return (
+          <div className={`${sizeClasses[size]} relative flex items-center justify-center`}>
+            <div className="w-full h-full rounded-full bg-red-500 flex items-center justify-center">
+              <span className="text-white font-bold text-lg">B</span>
+            </div>
+          </div>
+        )
+      
+      case 'professional':
+        return (
+          <div className={`${sizeClasses[size]} relative flex items-center justify-center`}>
+            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-red-500 to-red-700 shadow-lg"></div>
+            <div className="relative w-4/5 h-4/5 rounded-full bg-white flex items-center justify-center">
+              <div className="w-3/4 h-3/4 rounded-full bg-red-500 flex items-center justify-center">
+                <span className="text-white font-bold text-sm">B</span>
+              </div>
+            </div>
+          </div>
+        )
+      
+      default:
+        return (
+          <div className={`${sizeClasses[size]} relative flex items-center justify-center`}>
+            {/* Outer Circle */}
+            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-red-400 to-red-600 shadow-lg"></div>
+            
+            {/* Inner Circle */}
+            <div className="relative w-3/4 h-3/4 rounded-full bg-white flex items-center justify-center">
+              {/* Tick Mark */}
+              <svg 
+                className="w-1/2 h-1/2 text-red-600" 
+                fill="none" 
+                stroke="currentColor" 
+                viewBox="0 0 24 24"
+              >
+                <path 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  strokeWidth={3} 
+                  d="M5 13l4 4L19 7" 
+                />
+              </svg>
+            </div>
+            
+            {/* Subtle glow effect */}
+            <div className="absolute inset-0 rounded-full bg-red-300 opacity-20 blur-sm"></div>
+          </div>
+        )
+    }
+  }
+
   return (
     <div className={`flex items-center space-x-3 ${className}`}>
-      {/* Logo Circle with Tick */}
-      <div className={`${sizeClasses[size]} relative flex items-center justify-center`}>
-        {/* Outer Circle */}
-        <div className="absolute inset-0 rounded-full bg-gradient-to-br from-red-400 to-red-600 shadow-lg"></div>
-        
-        {/* Inner Circle */}
-        <div className="relative w-3/4 h-3/4 rounded-full bg-white flex items-center justify-center">
-          {/* Tick Mark */}
-          <svg 
-            className="w-1/2 h-1/2 text-red-600" 
-            fill="none" 
-            stroke="currentColor" 
-            viewBox="0 0 24 24"
-          >
-            <path 
-              strokeLinecap="round" 
-              strokeLinejoin="round" 
-              strokeWidth={3} 
-              d="M5 13l4 4L19 7" 
-            />
-          </svg>
-        </div>
-        
-        {/* Subtle glow effect */}
-        <div className="absolute inset-0 rounded-full bg-red-300 opacity-20 blur-sm"></div>
-      </div>
+      {renderLogo()}
 
       {/* Text */}
       {showText && (
