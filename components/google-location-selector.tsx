@@ -60,7 +60,60 @@ export function GoogleLocationSelector({
         setLocations(data.data)
       } else {
         console.error('Error fetching locations:', data.error)
-        setLocations([])
+        // Try fallback to static locations
+        try {
+          const fallbackResponse = await fetch(`/api/locations?type=comprehensive&q=${encodeURIComponent(query)}&limit=10`)
+          const fallbackData = await fallbackResponse.json()
+          if (fallbackData.success) {
+            // Convert static data to LocationData format
+            const staticLocations: LocationData[] = []
+            
+            // Add cities
+            if (fallbackData.data.cities) {
+              fallbackData.data.cities.forEach((city: any) => {
+                staticLocations.push({
+                  id: `static_city_${city.city}_${city.state}`,
+                  name: city.city,
+                  formatted_address: `${city.city}, ${city.state}, India`,
+                  lat: city.lat,
+                  lng: city.lng,
+                  state: city.state,
+                  district: city.district || '',
+                  city: city.city,
+                  locality: '',
+                  country: 'India',
+                  postal_code: ''
+                })
+              })
+            }
+            
+            // Add localities
+            if (fallbackData.data.localities) {
+              fallbackData.data.localities.forEach((locality: any) => {
+                staticLocations.push({
+                  id: `static_locality_${locality.locality}_${locality.city}`,
+                  name: locality.locality,
+                  formatted_address: `${locality.locality}, ${locality.city}, ${locality.state}, India`,
+                  lat: locality.lat,
+                  lng: locality.lng,
+                  state: locality.state,
+                  district: locality.district || '',
+                  city: locality.city,
+                  locality: locality.locality,
+                  country: 'India',
+                  postal_code: ''
+                })
+              })
+            }
+            
+            setLocations(staticLocations.slice(0, 10))
+          } else {
+            setLocations([])
+          }
+        } catch (fallbackError) {
+          console.error('Fallback location fetch failed:', fallbackError)
+          setLocations([])
+        }
       }
     } catch (error) {
       console.error('Error fetching locations:', error)

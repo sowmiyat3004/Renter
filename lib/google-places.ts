@@ -1,3 +1,5 @@
+import { locationFallbackService } from './location-fallback'
+
 interface GooglePlaceResult {
   place_id: string
   formatted_address: string
@@ -39,8 +41,8 @@ class GooglePlacesService {
 
   async searchPlaces(query: string, countryCode: string = 'IN'): Promise<ParsedLocation[]> {
     if (!this.apiKey) {
-      console.warn('Google Places API key not configured')
-      return []
+      console.warn('Google Places API key not configured, using fallback service')
+      return locationFallbackService.searchPlaces(query, countryCode)
     }
 
     try {
@@ -58,14 +60,15 @@ class GooglePlacesService {
       return data.results.map((place: GooglePlaceResult) => this.parsePlaceResult(place))
     } catch (error) {
       console.error('Error fetching from Google Places API:', error)
-      return []
+      console.log('Falling back to static location data')
+      return locationFallbackService.searchPlaces(query, countryCode)
     }
   }
 
   async getPlaceDetails(placeId: string): Promise<ParsedLocation | null> {
     if (!this.apiKey) {
-      console.warn('Google Places API key not configured')
-      return null
+      console.warn('Google Places API key not configured, using fallback service')
+      return locationFallbackService.getPlaceDetails(placeId)
     }
 
     try {
@@ -83,7 +86,8 @@ class GooglePlacesService {
       return this.parsePlaceResult(data.result)
     } catch (error) {
       console.error('Error fetching place details:', error)
-      return null
+      console.log('Falling back to static location data')
+      return locationFallbackService.getPlaceDetails(placeId)
     }
   }
 
