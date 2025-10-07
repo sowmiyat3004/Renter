@@ -62,8 +62,22 @@ export function Broker360Logo({
         return (
           <div className={`${sizeClasses[size]} relative flex items-center justify-center`}>
             {customIcon || (
-              <div className="w-full h-full rounded-full bg-red-500 flex items-center justify-center">
-                <span className="text-white font-bold text-lg">B</span>
+              <div className="w-full h-full rounded-full bg-gradient-to-br from-red-500 to-red-600 shadow-lg flex items-center justify-center">
+                <div className="w-3/4 h-3/4 rounded-full bg-white flex items-center justify-center">
+                  <svg 
+                    className="w-1/2 h-1/2 text-red-600" 
+                    fill="none" 
+                    stroke="currentColor" 
+                    viewBox="0 0 24 24"
+                    strokeWidth={3}
+                  >
+                    <path 
+                      strokeLinecap="round" 
+                      strokeLinejoin="round" 
+                      d="M5 13l4 4L19 7" 
+                    />
+                  </svg>
+                </div>
               </div>
             )}
           </div>

@@ -18,7 +18,7 @@ import {
   ChevronDownIcon
 } from '@heroicons/react/24/outline'
 import NotificationBell from './notification-bell'
-import { Broker360Logo } from './broker360-logo'
+import { CircleTickLogo } from './circle-tick-logo'
 
 export function FixedHeader() {
   const { data: session, status } = useSession()
@@ -62,7 +62,7 @@ export function FixedHeader() {
           {/* Logo */}
           <div className="flex-shrink-0">
             <Link href="/" className="flex items-center">
-              <Broker360Logo size="md" showText={true} />
+              <CircleTickLogo variant="premium" size="md" showText={true} />
             </Link>
           </div>
 
