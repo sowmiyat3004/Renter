@@ -34,12 +34,14 @@ interface CreateListingForm {
   postedBy?: string
   floorNumber?: string
   availableFrom?: string
+  direction?: string
   sharingType?: string
   acRoom?: boolean
   gender?: string
   bhk?: string
   comments?: string
   amenities: string[]
+  location?: any
 }
 
 export default function CreateListingEnhancedPage() {
@@ -145,6 +147,7 @@ export default function CreateListingEnhancedPage() {
         postedBy: data.postedBy,
         floorNumber: data.floorNumber,
         availableFrom: data.availableFrom,
+        direction: data.direction,
         sharingType: data.sharingType,
         acRoom: data.acRoom,
         gender: data.gender,
