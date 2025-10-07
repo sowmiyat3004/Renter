@@ -170,7 +170,7 @@ export async function POST(request: NextRequest) {
         availableFrom: validatedData.availableFrom ? new Date(validatedData.availableFrom) : null,
         direction: validatedData.direction,
         sharingType: validatedData.sharingType,
-        acRoom: validatedData.acRoom,
+        acRoom: validatedData.acRoom === 'true' || validatedData.acRoom === true ? true : validatedData.acRoom === 'false' || validatedData.acRoom === false ? false : null,
         gender: validatedData.gender,
         bhk: validatedData.bhk,
         comments: validatedData.comments,
