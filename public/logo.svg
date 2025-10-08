@@ -3,6 +3,6 @@
   <circle cx="24" cy="24" r="24" fill="#0066FF"/>
   <!-- Inner white circle -->
   <circle cx="24" cy="24" r="18" fill="white"/>
-  <!-- Checkmark that touches the inner circle -->
-  <path d="M16 24L22 30L32 18" stroke="#0066FF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Bigger checkmark that touches the inner circle edges -->
+  <path d="M12 24L20 32L36 16" stroke="#0066FF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
