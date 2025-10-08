@@ -59,20 +59,16 @@ export function CircleTickLogo({
           <div className={`${sizeClasses[size]} relative flex items-center justify-center`}>
             {/* Main blue circle - thick outer ring (exact match to image but blue) */}
             <div className="relative w-full h-full rounded-full bg-blue-600 shadow-lg flex items-center justify-center">
-              {/* Inner white circle - checkmark should touch edges */}
+              {/* Inner white circle - checkmark should fill most of the space */}
               <div className="w-3/4 h-3/4 rounded-full bg-white flex items-center justify-center">
-                {/* Bold blue checkmark that touches the edges (exact match to image but blue) */}
+                {/* Very bold blue checkmark that fills the white circle (exact match to image but blue) */}
                 <svg 
-                  className="w-3/4 h-3/4 text-blue-600" 
-                  fill="none" 
-                  stroke="currentColor" 
+                  className="w-4/5 h-4/5 text-blue-600" 
+                  fill="currentColor" 
                   viewBox="0 0 24 24"
-                  strokeWidth={3}
                 >
                   <path 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round" 
-                    d="M5 13l4 4L19 7" 
+                    d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" 
                   />
                 </svg>
               </div>
@@ -86,16 +82,12 @@ export function CircleTickLogo({
             <div className="w-full h-full rounded-full bg-blue-600 shadow-lg flex items-center justify-center">
               <div className="w-3/4 h-3/4 rounded-full bg-white flex items-center justify-center">
                 <svg 
-                  className="w-3/4 h-3/4 text-blue-600" 
-                  fill="none" 
-                  stroke="currentColor" 
+                  className="w-4/5 h-4/5 text-blue-600" 
+                  fill="currentColor" 
                   viewBox="0 0 24 24"
-                  strokeWidth={3}
                 >
                   <path 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round" 
-                    d="M5 13l4 4L19 7" 
+                    d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" 
                   />
                 </svg>
               </div>
