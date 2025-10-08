@@ -59,15 +59,15 @@ export function CircleTickLogo({
           <div className={`${sizeClasses[size]} relative flex items-center justify-center`}>
             {/* Main blue circle - thick outer ring (exact match to image but blue) */}
             <div className="relative w-full h-full rounded-full bg-blue-600 shadow-lg flex items-center justify-center">
-              {/* Inner white circle */}
+              {/* Inner white circle - checkmark should touch edges */}
               <div className="w-3/4 h-3/4 rounded-full bg-white flex items-center justify-center">
-                {/* Bold blue checkmark (exact match to image but blue) */}
+                {/* Bold blue checkmark that touches the edges (exact match to image but blue) */}
                 <svg 
-                  className="w-1/2 h-1/2 text-blue-600" 
+                  className="w-3/4 h-3/4 text-blue-600" 
                   fill="none" 
                   stroke="currentColor" 
                   viewBox="0 0 24 24"
-                  strokeWidth={4}
+                  strokeWidth={3}
                 >
                   <path 
                     strokeLinecap="round" 
@@ -83,10 +83,10 @@ export function CircleTickLogo({
       default:
         return (
           <div className={`${sizeClasses[size]} relative flex items-center justify-center`}>
-            <div className="w-full h-full rounded-full bg-gradient-to-br from-blue-500 to-blue-600 shadow-lg flex items-center justify-center">
+            <div className="w-full h-full rounded-full bg-blue-600 shadow-lg flex items-center justify-center">
               <div className="w-3/4 h-3/4 rounded-full bg-white flex items-center justify-center">
                 <svg 
-                  className="w-1/2 h-1/2 text-blue-600" 
+                  className="w-3/4 h-3/4 text-blue-600" 
                   fill="none" 
                   stroke="currentColor" 
                   viewBox="0 0 24 24"
