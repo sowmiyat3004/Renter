@@ -74,8 +74,8 @@ export function FixedHeader() {
                 href={item.href}
                 className={`text-sm font-medium ${
                   isActive(item.href)
-                    ? 'text-red-600 border-b-2 border-red-600 pb-1' 
-                    : 'text-gray-700 hover:text-red-600'
+                    ? 'text-blue-600 border-b-2 border-blue-600 pb-1' 
+                    : 'text-gray-700 hover:text-blue-600'
                 }`}
               >
                 {item.name}
@@ -190,7 +190,7 @@ export function FixedHeader() {
                 </Link>
                 <Link
                   href="/auth/signup"
-                  className="bg-red-500 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-red-600 transition-colors duration-200"
+                  className="bg-blue-500 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-600 transition-colors duration-200"
                 >
                   Sign up
                 </Link>
@@ -202,7 +202,7 @@ export function FixedHeader() {
           <div className="md:hidden">
             <button
               type="button"
-              className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+              className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
               <span className="sr-only">Open main menu</span>
@@ -225,8 +225,8 @@ export function FixedHeader() {
                   href={item.href}
                   className={`block px-3 py-2 text-base font-medium ${
                     isActive(item.href)
-                      ? 'text-red-600 bg-red-50'
-                      : 'text-gray-700 hover:text-red-600 hover:bg-gray-50'
+                      ? 'text-blue-600 bg-blue-50'
+                      : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50'
                   }`}
                   onClick={() => setMobileMenuOpen(false)}
                 >
@@ -241,7 +241,7 @@ export function FixedHeader() {
                     <Link
                       key={item.name}
                       href={item.href}
-                      className="flex items-center px-3 py-2 text-base font-medium text-gray-700 hover:text-red-600 hover:bg-gray-50"
+                      className="flex items-center px-3 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
                       onClick={() => setMobileMenuOpen(false)}
                     >
                       {item.icon && <item.icon className="h-5 w-5 mr-3" />}
@@ -259,7 +259,7 @@ export function FixedHeader() {
                         <Link
                           key={item.name}
                           href={item.href}
-                          className="flex items-center px-3 py-2 text-base font-medium text-gray-700 hover:text-red-600 hover:bg-gray-50"
+                          className="flex items-center px-3 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
                           onClick={() => setMobileMenuOpen(false)}
                         >
                           {item.icon && <item.icon className="h-5 w-5 mr-3" />}
