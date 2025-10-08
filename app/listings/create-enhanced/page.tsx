@@ -272,11 +272,11 @@ export default function CreateListingEnhancedPage() {
                   type="radio"
                   value="HOME"
                   {...register('rentType')}
-                  className="h-4 w-4 text-red-600 focus:ring-red-500"
+                  className="h-4 w-4 text-blue-600 focus:ring-blue-500"
                 />
                 <div className="ml-3">
                   <div className="flex items-center">
-                    <Home className="h-5 w-5 text-red-600 mr-2" />
+                    <Home className="h-5 w-5 text-blue-600 mr-2" />
                     <span className="font-medium">Home</span>
                   </div>
                   <p className="text-sm text-gray-500">House, Apartment, Villa</p>
@@ -288,11 +288,11 @@ export default function CreateListingEnhancedPage() {
                   type="radio"
                   value="PG"
                   {...register('rentType')}
-                  className="h-4 w-4 text-red-600 focus:ring-red-500"
+                  className="h-4 w-4 text-blue-600 focus:ring-blue-500"
                 />
                 <div className="ml-3">
                   <div className="flex items-center">
-                    <Users className="h-5 w-5 text-red-600 mr-2" />
+                    <Users className="h-5 w-5 text-blue-600 mr-2" />
                     <span className="font-medium">PG</span>
                   </div>
                   <p className="text-sm text-gray-500">Paying Guest</p>
@@ -304,11 +304,11 @@ export default function CreateListingEnhancedPage() {
                   type="radio"
                   value="ROOM_SHARING"
                   {...register('rentType')}
-                  className="h-4 w-4 text-red-600 focus:ring-red-500"
+                  className="h-4 w-4 text-blue-600 focus:ring-blue-500"
                 />
                 <div className="ml-3">
                   <div className="flex items-center">
-                    <Building className="h-5 w-5 text-red-600 mr-2" />
+                    <Building className="h-5 w-5 text-blue-600 mr-2" />
                     <span className="font-medium">Room Sharing</span>
                   </div>
                   <p className="text-sm text-gray-500">Shared Room</p>
@@ -666,7 +666,7 @@ export default function CreateListingEnhancedPage() {
                     value={amenity.id}
                     checked={selectedAmenities.includes(amenity.id)}
                     onChange={() => toggleAmenity(amenity.id)}
-                    className="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded"
+                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                   />
                   <span className="text-sm text-gray-700">{amenity.name}</span>
                 </label>
@@ -728,7 +728,7 @@ export default function CreateListingEnhancedPage() {
                         <button
                           type="button"
                           onClick={() => removeUploadedImage(index)}
-                          className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                          className="absolute top-2 right-2 bg-blue-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
                         >
                           <X className="h-4 w-4" />
                         </button>

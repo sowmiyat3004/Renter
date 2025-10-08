@@ -174,8 +174,8 @@ export function GoogleLocationSelector({
             <Combobox.Input
               ref={inputRef}
               className={clsx(
-                'block w-full pl-10 pr-10 py-2 border rounded-md shadow-sm focus:ring-red-500 focus:border-red-500 sm:text-sm',
-                error ? 'border-red-300' : 'border-gray-300'
+                'block w-full pl-10 pr-10 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm',
+                error ? 'border-blue-300' : 'border-gray-300'
               )}
               placeholder={placeholder}
               value={query}
@@ -185,7 +185,7 @@ export function GoogleLocationSelector({
             />
             <div className="absolute inset-y-0 right-0 flex items-center pr-3">
               {isLoading ? (
-                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-red-600"></div>
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
               ) : (
                 <ChevronDownIcon className="h-4 w-4 text-gray-400" />
               )}
@@ -211,7 +211,7 @@ export function GoogleLocationSelector({
                   className={({ active }) =>
                     clsx(
                       'relative cursor-default select-none py-2 pl-10 pr-4',
-                      active ? 'bg-red-600 text-white' : 'text-gray-900'
+                      active ? 'bg-blue-600 text-white' : 'text-gray-900'
                     )
                   }
                 >
@@ -222,7 +222,7 @@ export function GoogleLocationSelector({
                       </span>
                       <span className={clsx(
                         'absolute inset-y-0 left-0 flex items-center pl-3',
-                        active ? 'text-white' : 'text-red-600'
+                        active ? 'text-white' : 'text-blue-600'
                       )}>
                         <MapPinIcon className="h-4 w-4" />
                       </span>
@@ -239,7 +239,7 @@ export function GoogleLocationSelector({
       </Combobox>
 
       {error && (
-        <p className="text-sm text-red-600">{error}</p>
+        <p className="text-sm text-blue-600">{error}</p>
       )}
     </div>
   )

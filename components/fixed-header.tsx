@@ -98,8 +98,8 @@ export function FixedHeader() {
                     onClick={() => setUserMenuOpen(!userMenuOpen)}
                     className="flex items-center space-x-2 text-sm font-medium text-gray-700 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 rounded-md p-2"
                   >
-                    <div className="h-8 w-8 bg-red-100 rounded-full flex items-center justify-center">
-                      <UserIcon className="h-5 w-5 text-red-600" />
+                    <div className="h-8 w-8 bg-blue-100 rounded-full flex items-center justify-center">
+                      <UserIcon className="h-5 w-5 text-blue-600" />
                     </div>
                     <span className="hidden lg:block">{session.user?.name || session.user?.email}</span>
                     <ChevronDownIcon className="h-4 w-4 text-gray-400" />
@@ -122,7 +122,7 @@ export function FixedHeader() {
                             <p className="text-sm font-medium text-gray-900">{session.user?.name}</p>
                             <p className="text-sm text-gray-500">{session.user?.email}</p>
                             {isAdmin && (
-                              <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800 mt-1">
+                              <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 mt-1">
                                 {session.user?.role}
                               </span>
                             )}
@@ -184,7 +184,7 @@ export function FixedHeader() {
               <div className="flex items-center space-x-4">
                 <Link
                   href="/auth/signin"
-                  className="text-sm font-medium text-gray-700 hover:text-red-600"
+                  className="text-sm font-medium text-gray-700 hover:text-blue-600"
                 >
                   Sign in
                 </Link>
@@ -286,14 +286,14 @@ export function FixedHeader() {
                   <div className="border-t border-gray-200 my-1"></div>
                   <Link
                     href="/auth/signin"
-                    className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-red-600 hover:bg-gray-50"
+                    className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     Sign in
                   </Link>
                   <Link
                     href="/auth/signup"
-                    className="block px-3 py-2 text-base font-medium text-red-600 hover:text-red-500"
+                    className="block px-3 py-2 text-base font-medium text-blue-600 hover:text-blue-500"
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     Sign up
