@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
 
     console.log(`Searching for: "${query}" in country: ${country}`)
 
-    let results = []
+    let results: any[] = []
 
     try {
       // Try Google Places API first
