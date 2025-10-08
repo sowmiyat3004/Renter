@@ -162,7 +162,7 @@ export default function CreateListingEnhancedPage() {
         availableFrom: data.availableFrom,
         direction: data.direction,
         sharingType: data.sharingType,
-        acRoom: data.acRoom === 'true' ? true : data.acRoom === 'false' ? false : data.acRoom === true ? true : data.acRoom === false ? false : null,
+        acRoom: data.acRoom === 'true' ? true : data.acRoom === 'false' ? false : null,
         gender: data.gender,
         bhk: data.bhk,
         comments: data.comments,
