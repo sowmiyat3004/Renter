@@ -24,7 +24,7 @@ export default function LogoDemoPage() {
               Premium Circle Tick Logo
             </h3>
             <div className="flex justify-center mb-4">
-              <CircleTickLogo variant="premium" size="xl" showText={true} />
+              <CircleTickLogo size="xl" showText={true} />
             </div>
             <p className="text-sm text-gray-600">
               High-quality gradient circle with white inner circle and red tick mark
@@ -37,7 +37,7 @@ export default function LogoDemoPage() {
               Default Circle Tick Logo
             </h3>
             <div className="flex justify-center mb-4">
-              <CircleTickLogo variant="default" size="xl" showText={true} />
+              <CircleTickLogo size="xl" showText={true} />
             </div>
             <p className="text-sm text-gray-600">
               Clean gradient circle with white inner circle and red tick mark
@@ -50,7 +50,7 @@ export default function LogoDemoPage() {
               Minimal Circle Tick Logo
             </h3>
             <div className="flex justify-center mb-4">
-              <CircleTickLogo variant="minimal" size="xl" showText={true} />
+              <CircleTickLogo size="xl" showText={true} />
             </div>
             <p className="text-sm text-gray-600">
               Simple red circle with white inner circle and red tick mark
@@ -64,19 +64,19 @@ export default function LogoDemoPage() {
             </h3>
             <div className="space-y-4">
               <div className="flex items-center justify-center space-x-4">
-                <CircleTickLogo variant="premium" size="sm" showText={false} />
+                <CircleTickLogo size="sm" showText={false} />
                 <span className="text-sm text-gray-600">Small</span>
               </div>
               <div className="flex items-center justify-center space-x-4">
-                <CircleTickLogo variant="premium" size="md" showText={false} />
+                <CircleTickLogo size="md" showText={false} />
                 <span className="text-sm text-gray-600">Medium</span>
               </div>
               <div className="flex items-center justify-center space-x-4">
-                <CircleTickLogo variant="premium" size="lg" showText={false} />
+                <CircleTickLogo size="lg" showText={false} />
                 <span className="text-sm text-gray-600">Large</span>
               </div>
               <div className="flex items-center justify-center space-x-4">
-                <CircleTickLogo variant="premium" size="xl" showText={false} />
+                <CircleTickLogo size="xl" showText={false} />
                 <span className="text-sm text-gray-600">Extra Large</span>
               </div>
             </div>
@@ -88,7 +88,7 @@ export default function LogoDemoPage() {
               Icon Only
             </h3>
             <div className="flex justify-center mb-4">
-              <CircleTickLogo variant="premium" size="xl" showText={false} />
+              <CircleTickLogo size="xl" showText={false} />
             </div>
             <p className="text-sm text-gray-600">
               Perfect for favicons, app icons, and compact spaces
@@ -102,11 +102,11 @@ export default function LogoDemoPage() {
             </h3>
             <div className="space-y-4">
               <div className="flex items-center justify-center space-x-4">
-                <Broker360Logo variant="default" size="lg" showText={false} />
+                <Broker360Logo size="lg" showText={false} />
                 <span className="text-sm text-gray-600">Original</span>
               </div>
               <div className="flex items-center justify-center space-x-4">
-                <CircleTickLogo variant="premium" size="lg" showText={false} />
+                <CircleTickLogo size="lg" showText={false} />
                 <span className="text-sm text-gray-600">New Circle Tick</span>
               </div>
             </div>
@@ -160,14 +160,14 @@ export default function LogoDemoPage() {
             <pre className="text-sm overflow-x-auto">
 {`import { CircleTickLogo } from '@/components/circle-tick-logo'
 
-// Premium version (recommended)
-<CircleTickLogo variant="premium" size="md" showText={true} />
+// Logo with text
+<CircleTickLogo size="md" showText={true} />
 
-// Minimal version
-<CircleTickLogo variant="minimal" size="lg" showText={false} />
+// Logo without text
+<CircleTickLogo size="lg" showText={false} />
 
-// Default version
-<CircleTickLogo variant="default" size="xl" showText={true} />`}
+// Large logo with text
+<CircleTickLogo size="xl" showText={true} />`}
             </pre>
           </div>
         </div>
