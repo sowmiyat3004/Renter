@@ -34,10 +34,10 @@ export function CircleTickLogo({
       case 'minimal':
         return (
           <div className={`${sizeClasses[size]} relative flex items-center justify-center`}>
-            <div className="w-full h-full rounded-full bg-red-500 flex items-center justify-center">
+            <div className="w-full h-full rounded-full bg-blue-500 flex items-center justify-center">
               <div className="w-3/4 h-3/4 rounded-full bg-white flex items-center justify-center">
                 <svg 
-                  className="w-1/2 h-1/2 text-red-500" 
+                  className="w-1/2 h-1/2 text-blue-500" 
                   fill="none" 
                   stroke="currentColor" 
                   viewBox="0 0 24 24"
@@ -57,11 +57,11 @@ export function CircleTickLogo({
       case 'premium':
         return (
           <div className={`${sizeClasses[size]} relative flex items-center justify-center`}>
-            {/* Main blue circle - thick outer ring */}
+            {/* Main blue circle - thick outer ring (exact match to image but blue) */}
             <div className="relative w-full h-full rounded-full bg-blue-600 shadow-lg flex items-center justify-center">
               {/* Inner white circle */}
               <div className="w-3/4 h-3/4 rounded-full bg-white flex items-center justify-center">
-                {/* Bold blue checkmark */}
+                {/* Bold blue checkmark (exact match to image but blue) */}
                 <svg 
                   className="w-1/2 h-1/2 text-blue-600" 
                   fill="none" 
@@ -83,10 +83,10 @@ export function CircleTickLogo({
       default:
         return (
           <div className={`${sizeClasses[size]} relative flex items-center justify-center`}>
-            <div className="w-full h-full rounded-full bg-gradient-to-br from-red-500 to-red-600 shadow-lg flex items-center justify-center">
+            <div className="w-full h-full rounded-full bg-gradient-to-br from-blue-500 to-blue-600 shadow-lg flex items-center justify-center">
               <div className="w-3/4 h-3/4 rounded-full bg-white flex items-center justify-center">
                 <svg 
-                  className="w-1/2 h-1/2 text-red-600" 
+                  className="w-1/2 h-1/2 text-blue-600" 
                   fill="none" 
                   stroke="currentColor" 
                   viewBox="0 0 24 24"
@@ -115,7 +115,7 @@ export function CircleTickLogo({
           <span className={`font-bold text-gray-900 ${textSizeClasses[size]}`}>
             Broker360
           </span>
-          <span className={`text-red-600 font-medium ${size === 'sm' ? 'text-xs' : 'text-sm'}`}>
+          <span className={`text-blue-600 font-medium ${size === 'sm' ? 'text-xs' : 'text-sm'}`}>
             Property Solutions
           </span>
         </div>
