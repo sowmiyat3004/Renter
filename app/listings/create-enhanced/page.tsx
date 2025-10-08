@@ -139,15 +139,7 @@ export default function CreateListingEnhancedPage() {
         return
       }
       
-      if (!data.state || !data.city) {
-        toast.error('Please select a valid location')
-        return
-      }
-      
-      if (!data.lat || !data.lng || data.lat === 0 || data.lng === 0) {
-        toast.error('Please select a valid location with coordinates')
-        return
-      }
+      // Location is now optional - no validation required
 
       const listingData = {
         title: data.title,
@@ -746,7 +738,7 @@ export default function CreateListingEnhancedPage() {
             
             <div className="space-y-6">
               <GoogleLocationSelector
-                label="Location *"
+                label="Location (Optional)"
                 value={watch('location')}
                 onChange={(location) => {
                   if (location) {
@@ -768,12 +760,9 @@ export default function CreateListingEnhancedPage() {
                   }
                 }}
                 onAddressChange={(address) => setValue('address', address)}
-                error={errors.city || errors.state || errors.lat || errors.lng ? 'Please select a valid location' : undefined}
+                error={undefined}
               />
-              {errors.city && <p className="form-error">{String(errors.city.message)}</p>}
-              {errors.state && <p className="form-error">{String(errors.state.message)}</p>}
-              {errors.lat && <p className="form-error">{String(errors.lat.message)}</p>}
-              {errors.lng && <p className="form-error">{String(errors.lng.message)}</p>}
+              {/* Location errors removed since location is now optional */}
 
               <div>
                 <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-2">

@@ -60,10 +60,10 @@ export function CircleTickLogo({
             {/* Main blue circle - thick outer ring (exact match to image but blue) */}
             <div className="relative w-full h-full rounded-full bg-blue-600 shadow-lg flex items-center justify-center">
               {/* Inner white circle - checkmark should fill most of the space */}
-              <div className="w-3/4 h-3/4 rounded-full bg-white flex items-center justify-center">
+              <div className="w-4/5 h-4/5 rounded-full bg-white flex items-center justify-center">
                 {/* Very bold blue checkmark that fills the white circle (exact match to image but blue) */}
                 <svg 
-                  className="w-4/5 h-4/5 text-blue-600" 
+                  className="w-5/6 h-5/6 text-blue-600" 
                   fill="currentColor" 
                   viewBox="0 0 24 24"
                 >
@@ -80,9 +80,9 @@ export function CircleTickLogo({
         return (
           <div className={`${sizeClasses[size]} relative flex items-center justify-center`}>
             <div className="w-full h-full rounded-full bg-blue-600 shadow-lg flex items-center justify-center">
-              <div className="w-3/4 h-3/4 rounded-full bg-white flex items-center justify-center">
+              <div className="w-4/5 h-4/5 rounded-full bg-white flex items-center justify-center">
                 <svg 
-                  className="w-4/5 h-4/5 text-blue-600" 
+                  className="w-5/6 h-5/6 text-blue-600" 
                   fill="currentColor" 
                   viewBox="0 0 24 24"
                 >
@@ -101,17 +101,14 @@ export function CircleTickLogo({
     <div className={`flex items-center space-x-3 ${className}`}>
       {renderLogo()}
 
-      {/* Text */}
-      {showText && (
-        <div className="flex flex-col">
-          <span className={`font-bold text-gray-900 ${textSizeClasses[size]}`}>
-            Broker360
-          </span>
-          <span className={`text-blue-600 font-medium ${size === 'sm' ? 'text-xs' : 'text-sm'}`}>
-            Property Solutions
-          </span>
-        </div>
-      )}
+            {/* Text */}
+            {showText && (
+              <div className="flex flex-col">
+                <span className={`font-bold text-gray-900 ${textSizeClasses[size]} tracking-tight`}>
+                  Broker 360
+                </span>
+              </div>
+            )}
     </div>
   )
 }
