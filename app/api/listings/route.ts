@@ -140,10 +140,10 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    console.log('Received listing data:', body)
+    console.log('Received listing data:', JSON.stringify(body, null, 2))
     
     const validatedData = createListingSchema.parse(body)
-    console.log('Validated data:', validatedData)
+    console.log('Validated data:', JSON.stringify(validatedData, null, 2))
 
     const listing = await prisma.listing.create({
       data: {
@@ -213,6 +213,9 @@ export async function POST(request: NextRequest) {
 
   } catch (error) {
     console.error('Create listing error:', error)
+    console.error('Error type:', typeof error)
+    console.error('Error name:', error instanceof Error ? error.name : 'Not an Error')
+    console.error('Error message:', error instanceof Error ? error.message : 'Unknown error')
     
     if (error instanceof Error && error.name === 'ZodError') {
       console.error('Validation error:', error.message)
@@ -224,6 +227,8 @@ export async function POST(request: NextRequest) {
         field: err.path.join('.'),
         message: err.message
       })) || []
+      
+      console.error('Field errors:', fieldErrors)
       
       return NextResponse.json(
         { 

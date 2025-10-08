@@ -180,6 +180,7 @@ export default function CreateListingEnhancedPage() {
       })
 
       const result = await response.json()
+      console.log('API Response:', result)
 
       if (result.success) {
         // Upload images after listing creation
