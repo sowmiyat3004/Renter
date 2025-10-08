@@ -62,7 +62,7 @@ export function FixedHeader() {
           {/* Logo */}
           <div className="flex-shrink-0">
             <Link href="/" className="flex items-center">
-              <CircleTickLogo variant="premium" size="md" showText={true} />
+              <CircleTickLogo size="md" showText={true} />
             </Link>
           </div>
 
