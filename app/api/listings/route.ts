@@ -142,6 +142,18 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     console.log('Received listing data:', JSON.stringify(body, null, 2))
     
+    // Test database connection
+    try {
+      await prisma.$connect()
+      console.log('Database connection successful')
+    } catch (dbError) {
+      console.error('Database connection failed:', dbError)
+      return NextResponse.json(
+        { success: false, error: 'Database connection failed' },
+        { status: 500 }
+      )
+    }
+    
     const validatedData = createListingSchema.parse(body)
     console.log('Validated data:', JSON.stringify(validatedData, null, 2))
 

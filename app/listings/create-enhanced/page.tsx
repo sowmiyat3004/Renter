@@ -179,6 +179,9 @@ export default function CreateListingEnhancedPage() {
         body: JSON.stringify(listingData),
       })
 
+      console.log('Response status:', response.status)
+      console.log('Response headers:', Object.fromEntries(response.headers.entries()))
+
       const result = await response.json()
       console.log('API Response:', result)
 
@@ -223,6 +226,9 @@ export default function CreateListingEnhancedPage() {
       }
     } catch (error) {
       console.error('Listing creation error:', error)
+      console.error('Error type:', typeof error)
+      console.error('Error message:', error instanceof Error ? error.message : 'Unknown error')
+      console.error('Error stack:', error instanceof Error ? error.stack : 'No stack trace')
       toast.error('Something went wrong. Please try again.')
     } finally {
       setIsLoading(false)
