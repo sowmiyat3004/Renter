@@ -40,7 +40,7 @@ export function Broker360Logo({
       case 'minimal':
         return (
           <div className={`${sizeClasses[size]} relative flex items-center justify-center`}>
-            <div className="w-full h-full rounded-full bg-red-500 flex items-center justify-center">
+            <div className="w-full h-full rounded-lg bg-blue-600 flex items-center justify-center">
               <span className="text-white font-bold text-lg">B</span>
             </div>
           </div>
@@ -49,9 +49,9 @@ export function Broker360Logo({
       case 'professional':
         return (
           <div className={`${sizeClasses[size]} relative flex items-center justify-center`}>
-            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-red-500 to-red-700 shadow-lg"></div>
-            <div className="relative w-4/5 h-4/5 rounded-full bg-white flex items-center justify-center">
-              <div className="w-3/4 h-3/4 rounded-full bg-red-500 flex items-center justify-center">
+            <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-blue-500 to-blue-700 shadow-lg"></div>
+            <div className="relative w-4/5 h-4/5 rounded-lg bg-white flex items-center justify-center">
+              <div className="w-3/4 h-3/4 rounded-lg bg-blue-600 flex items-center justify-center">
                 <span className="text-white font-bold text-sm">B</span>
               </div>
             </div>
@@ -86,29 +86,10 @@ export function Broker360Logo({
       default:
         return (
           <div className={`${sizeClasses[size]} relative flex items-center justify-center`}>
-            {/* Outer Circle */}
-            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-red-400 to-red-600 shadow-lg"></div>
-            
-            {/* Inner Circle */}
-            <div className="relative w-3/4 h-3/4 rounded-full bg-white flex items-center justify-center">
-              {/* Tick Mark */}
-              <svg 
-                className="w-1/2 h-1/2 text-red-600" 
-                fill="none" 
-                stroke="currentColor" 
-                viewBox="0 0 24 24"
-              >
-                <path 
-                  strokeLinecap="round" 
-                  strokeLinejoin="round" 
-                  strokeWidth={3} 
-                  d="M5 13l4 4L19 7" 
-                />
-              </svg>
+            {/* Blue rounded square with B */}
+            <div className="w-full h-full rounded-lg bg-blue-600 flex items-center justify-center">
+              <span className="text-white font-bold text-lg">B</span>
             </div>
-            
-            {/* Subtle glow effect */}
-            <div className="absolute inset-0 rounded-full bg-red-300 opacity-20 blur-sm"></div>
           </div>
         )
     }
@@ -124,7 +105,7 @@ export function Broker360Logo({
           <span className={`font-bold text-gray-900 ${textSizeClasses[size]}`}>
             {customText}
           </span>
-          <span className={`text-red-600 font-medium ${size === 'sm' ? 'text-xs' : 'text-sm'}`}>
+          <span className={`text-blue-600 font-medium ${size === 'sm' ? 'text-xs' : 'text-sm'}`}>
             {customSubtext}
           </span>
         </div>

@@ -1,8 +1,5 @@
 <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- Blue circle background -->
-  <circle cx="24" cy="24" r="24" fill="#0066FF"/>
-  <!-- White inner circle -->
-  <circle cx="24" cy="24" r="18" fill="white"/>
-  <!-- Blue "B" letter with outline -->
-  <text x="24" y="32" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#0066FF" stroke="#0066FF" stroke-width="1">B</text>
+  <!-- Blue rounded square with B -->
+  <rect x="6" y="6" width="36" height="36" rx="8" fill="#0066FF"/>
+  <text x="24" y="30" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="white">B</text>
 </svg>
