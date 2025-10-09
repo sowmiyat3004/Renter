@@ -3,6 +3,6 @@
   <circle cx="24" cy="24" r="24" fill="#0066FF"/>
   <!-- White inner circle -->
   <circle cx="24" cy="24" r="18" fill="white"/>
-  <!-- Blue checkmark that fills the white circle -->
-  <path d="M14 24L20 30L34 16" stroke="#0066FF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Blue "B" letter with outline -->
+  <text x="24" y="32" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#0066FF" stroke="#0066FF" stroke-width="1">B</text>
 </svg>
