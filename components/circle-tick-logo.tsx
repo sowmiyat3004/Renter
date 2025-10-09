@@ -33,7 +33,7 @@ export function CircleTickLogo({
       {/* Logo Image */}
       <div className={`${sizeClasses[size]} relative`}>
         <Image
-          src="/logo.svg"
+          src="/logo.png"
           alt="Broker360 Logo"
           width={48}
           height={48}
