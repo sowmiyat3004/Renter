@@ -28,9 +28,9 @@ export async function GET(request: NextRequest) {
       console.log('Trying Google Places Autocomplete API...')
       const predictions = await googleMapsService.searchPlaces(query, country)
       
-      // Get details for each prediction
+      // Get details for more predictions (up to 20 for better coverage)
       const detailedResults = await Promise.all(
-        predictions.slice(0, 10).map(async (prediction) => {
+        predictions.slice(0, 20).map(async (prediction) => {
           try {
             const details = await googleMapsService.getPlaceDetails(prediction.place_id)
             if (details) {

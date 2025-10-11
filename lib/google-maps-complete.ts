@@ -57,7 +57,8 @@ class GoogleMapsService {
     }
 
     try {
-      const url = `${this.baseUrl}/place/autocomplete/json?input=${encodeURIComponent(input)}&components=country:${country}&key=${this.apiKey}`
+      // Search for all types of places in India (cities, localities, landmarks, areas)
+      const url = `${this.baseUrl}/place/autocomplete/json?input=${encodeURIComponent(input)}&components=country:${country}&key=${this.apiKey}&language=en`
       
       const response = await fetch(url)
       const data = await response.json()
