@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'react-hot-toast'
 import { ArrowLeft, Upload, X, MapPin, Home, Bed, Bath, Calendar, Users, Building } from 'lucide-react'
-import { GoogleLocationSelector } from '@/components/google-location-selector'
+import { GoogleMapsAutocomplete } from '@/components/google-maps-autocomplete'
 
 interface Amenity {
   id: string
@@ -748,7 +748,7 @@ export default function CreateListingEnhancedPage() {
             <h2 className="text-xl font-semibold text-gray-900 mb-6">Location</h2>
             
             <div className="space-y-6">
-              <GoogleLocationSelector
+              <GoogleMapsAutocomplete
                 label="Location *"
                 value={watch('location')}
                 onChange={(location) => {
@@ -757,6 +757,7 @@ export default function CreateListingEnhancedPage() {
                     setValue('state', location.state || '')
                     setValue('district', location.district || '')
                     setValue('locality', location.locality || '')
+                    setValue('address', location.formatted_address || '')
                     setValue('lat', location.lat || 0)
                     setValue('lng', location.lng || 0)
                     setValue('location', location)
@@ -765,13 +766,16 @@ export default function CreateListingEnhancedPage() {
                     setValue('state', '')
                     setValue('district', '')
                     setValue('locality', '')
+                    setValue('address', '')
                     setValue('lat', 0)
                     setValue('lng', 0)
                     setValue('location', null)
                   }
                 }}
-                onAddressChange={(address) => setValue('address', address)}
+                placeholder="Type any location in India... (e.g., Koramangala, Jigani, Mumbai)"
                 error={errors.city || errors.state || errors.lat || errors.lng ? 'Please select a valid location' : undefined}
+                required
+                showDetectLocation
               />
               {errors.city && <p className="form-error">{String(errors.city.message)}</p>}
               {errors.state && <p className="form-error">{String(errors.state.message)}</p>}
