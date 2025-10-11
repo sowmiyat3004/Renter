@@ -4,6 +4,16 @@ import { useState, useEffect, useRef } from 'react'
 import { MapPinIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 import { loadGoogleMapsAPI, isGoogleMapsLoaded } from '@/lib/google-maps-loader'
 
+// Declare google as a global variable for TypeScript
+declare global {
+  interface Window {
+    google: any
+  }
+}
+
+// Access google from window
+const getGoogle = () => (typeof window !== 'undefined' ? window.google : undefined)
+
 interface LocationData {
   id: string
   name: string
@@ -55,7 +65,8 @@ export function GoogleMapsLocationSelector({
       .then(() => {
         setMapsLoaded(true)
         // Initialize services
-        if (isGoogleMapsLoaded()) {
+        const google = getGoogle()
+        if (isGoogleMapsLoaded() && google) {
           autocompleteService.current = new google.maps.places.AutocompleteService()
           placesService.current = new google.maps.places.PlacesService(document.createElement('div'))
           sessionToken.current = new google.maps.places.AutocompleteSessionToken()
@@ -96,11 +107,12 @@ export function GoogleMapsLocationSelector({
       request,
       (predictions: any[], status: string) => {
         setIsLoading(false)
+        const google = getGoogle()
         
-        if (status === google.maps.places.PlacesServiceStatus.OK && predictions) {
+        if (google && status === google.maps.places.PlacesServiceStatus.OK && predictions) {
           setPredictions(predictions)
           setIsOpen(true)
-        } else if (status === google.maps.places.PlacesServiceStatus.ZERO_RESULTS) {
+        } else if (google && status === google.maps.places.PlacesServiceStatus.ZERO_RESULTS) {
           setPredictions([])
           setIsOpen(false)
         } else {
@@ -155,7 +167,8 @@ export function GoogleMapsLocationSelector({
     }
 
     placesService.current.getDetails(request, (place: any, status: string) => {
-      if (status === google.maps.places.PlacesServiceStatus.OK && place) {
+      const google = getGoogle()
+      if (google && status === google.maps.places.PlacesServiceStatus.OK && place) {
         const locationData = parseGooglePlace(place)
         onChange(locationData)
         setQuery(locationData.formatted_address)

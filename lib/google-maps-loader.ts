@@ -1,6 +1,14 @@
 // Google Maps API Loader
 // This utility ensures Google Maps API is loaded only once
 
+// Declare google as a global variable for TypeScript
+declare global {
+  interface Window {
+    google: any
+    initGoogleMaps: () => void
+  }
+}
+
 let isLoading = false
 let isLoaded = false
 let loadPromise: Promise<void> | null = null
@@ -45,7 +53,7 @@ export function loadGoogleMapsAPI(): Promise<void> {
     script.defer = true
 
     // Define callback function
-    ;(window as any).initGoogleMaps = () => {
+    window.initGoogleMaps = () => {
       isLoaded = true
       isLoading = false
       console.log('Google Maps API loaded successfully')
@@ -66,13 +74,14 @@ export function loadGoogleMapsAPI(): Promise<void> {
 }
 
 export function isGoogleMapsLoaded(): boolean {
-  return isLoaded && typeof google !== 'undefined' && typeof google.maps !== 'undefined'
+  if (typeof window === 'undefined') return false
+  return isLoaded && typeof window.google !== 'undefined' && typeof window.google.maps !== 'undefined'
 }
 
 export function getGoogleMapsAPI() {
   if (!isGoogleMapsLoaded()) {
     throw new Error('Google Maps API is not loaded yet. Call loadGoogleMapsAPI() first.')
   }
-  return google.maps
+  return window.google.maps
 }
 
