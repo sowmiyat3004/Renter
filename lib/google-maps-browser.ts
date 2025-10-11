@@ -113,7 +113,9 @@ export function createAutocomplete(
   if (options?.onPlaceChanged) {
     autocomplete.addListener('place_changed', () => {
       const place = autocomplete.getPlace()
-      options.onPlaceChanged(place)
+      if (options.onPlaceChanged) {
+        options.onPlaceChanged(place)
+      }
     })
   }
 
