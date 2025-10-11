@@ -6,20 +6,12 @@ interface Broker360LogoProps {
   size?: 'sm' | 'md' | 'lg' | 'xl'
   showText?: boolean
   className?: string
-  variant?: 'default' | 'minimal' | 'professional' | 'custom'
-  customIcon?: React.ReactNode
-  customText?: string
-  customSubtext?: string
 }
 
 export function Broker360Logo({ 
   size = 'md', 
   showText = true, 
-  className = '',
-  variant = 'default',
-  customIcon,
-  customText = 'Broker360',
-  customSubtext = 'Property Solutions'
+  className = ''
 }: Broker360LogoProps) {
   const sizeClasses = {
     sm: 'w-8 h-8',
@@ -35,78 +27,20 @@ export function Broker360Logo({
     xl: 'text-2xl'
   }
 
-  const renderLogo = () => {
-    switch (variant) {
-      case 'minimal':
-        return (
-          <div className={`${sizeClasses[size]} relative flex items-center justify-center`}>
-            <div className="w-full h-full rounded-lg bg-blue-600 flex items-center justify-center">
-              <span className="text-white font-bold text-lg">B</span>
-            </div>
-          </div>
-        )
-      
-      case 'professional':
-        return (
-          <div className={`${sizeClasses[size]} relative flex items-center justify-center`}>
-            <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-blue-500 to-blue-700 shadow-lg"></div>
-            <div className="relative w-4/5 h-4/5 rounded-lg bg-white flex items-center justify-center">
-              <div className="w-3/4 h-3/4 rounded-lg bg-blue-600 flex items-center justify-center">
-                <span className="text-white font-bold text-sm">B</span>
-              </div>
-            </div>
-          </div>
-        )
-      
-      case 'custom':
-        return (
-          <div className={`${sizeClasses[size]} relative flex items-center justify-center`}>
-            {customIcon || (
-              <div className="w-full h-full rounded-full bg-gradient-to-br from-red-500 to-red-600 shadow-lg flex items-center justify-center">
-                <div className="w-3/4 h-3/4 rounded-full bg-white flex items-center justify-center">
-                  <svg 
-                    className="w-1/2 h-1/2 text-red-600" 
-                    fill="none" 
-                    stroke="currentColor" 
-                    viewBox="0 0 24 24"
-                    strokeWidth={3}
-                  >
-                    <path 
-                      strokeLinecap="round" 
-                      strokeLinejoin="round" 
-                      d="M5 13l4 4L19 7" 
-                    />
-                  </svg>
-                </div>
-              </div>
-            )}
-          </div>
-        )
-      
-      default:
-        return (
-          <div className={`${sizeClasses[size]} relative flex items-center justify-center`}>
-            {/* Blue rounded square with B */}
-            <div className="w-full h-full rounded-lg bg-blue-600 flex items-center justify-center">
-              <span className="text-white font-bold text-lg">B</span>
-            </div>
-          </div>
-        )
-    }
-  }
-
   return (
     <div className={`flex items-center space-x-3 ${className}`}>
-      {renderLogo()}
+      {/* B in blue square - perfectly centered */}
+      <div className={`${sizeClasses[size]} relative`}>
+        <div className="w-full h-full rounded-lg bg-blue-600 flex items-center justify-center">
+          <span className="text-white font-bold text-2xl">B</span>
+        </div>
+      </div>
 
-      {/* Text */}
+      {/* Text only if showText is true */}
       {showText && (
         <div className="flex flex-col">
-          <span className={`font-bold text-gray-900 ${textSizeClasses[size]}`}>
-            {customText}
-          </span>
-          <span className={`text-blue-600 font-medium ${size === 'sm' ? 'text-xs' : 'text-sm'}`}>
-            {customSubtext}
+          <span className={`font-bold text-blue-600 ${textSizeClasses[size]} tracking-tight`}>
+            Broker360
           </span>
         </div>
       )}
