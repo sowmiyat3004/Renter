@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { googlePlacesService } from '@/lib/google-places'
+import { googleMapsService } from '@/lib/google-maps-complete'
 import { locationFallbackService } from '@/lib/location-fallback'
 
 // Force dynamic rendering
@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
     const query = searchParams.get('q')
-    const country = searchParams.get('country') || 'IN'
+    const country = searchParams.get('country') || 'in'
 
     if (!query || query.length < 2) {
       return NextResponse.json({
@@ -25,9 +25,41 @@ export async function GET(request: NextRequest) {
 
     try {
       // Try Google Places API first
-      console.log('Trying Google Places API...')
-      results = await googlePlacesService.searchPlaces(query, country)
-      console.log(`Google Places API returned ${results.length} results`)
+      console.log('Trying Google Places Autocomplete API...')
+      const predictions = await googleMapsService.searchPlaces(query, country)
+      
+      // Get details for each prediction
+      const detailedResults = await Promise.all(
+        predictions.slice(0, 10).map(async (prediction) => {
+          try {
+            const details = await googleMapsService.getPlaceDetails(prediction.place_id)
+            if (details) {
+              const parsed = googleMapsService.parseAddressComponents(details.address_components)
+              return {
+                id: details.place_id,
+                place_id: details.place_id,
+                name: prediction.structured_formatting.main_text,
+                formatted_address: details.formatted_address,
+                lat: details.geometry.location.lat,
+                lng: details.geometry.location.lng,
+                state: parsed.state,
+                district: parsed.district,
+                city: parsed.city,
+                locality: parsed.locality,
+                country: parsed.country,
+                postal_code: parsed.postalCode
+              }
+            }
+            return null
+          } catch (error) {
+            console.error('Error fetching place details:', error)
+            return null
+          }
+        })
+      )
+      
+      results = detailedResults.filter(r => r !== null)
+      console.log(`Google Places API returned ${results.length} detailed results`)
     } catch (googleError) {
       console.log('Google Places API failed, trying fallback...', googleError)
       
